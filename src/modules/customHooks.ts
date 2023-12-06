@@ -38,11 +38,14 @@ export function useSetCatchClauseForErrorPopupHook() {
 /**
  * get method 커스텀 훅
  * @param {string} url api url
+ * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
 export function useGetDatasHook(
   url: string | '',
+  successCb?: () => any,
   failCb?: () => any,
   errorPopupBtnCb?: () => any,
 ) {
@@ -57,19 +60,26 @@ export function useGetDatasHook(
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setDatas(await getAPI(url, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
-  }, [url, errorPopupBtnCb]);
+  }, [url]);
 
   const useGetDatas = useCallback(
-    async (url: string, failCb?: () => any, errorPopupBtnCb?: () => any) => {
+    async (
+      url: string,
+      successCb?: () => any,
+      failCb?: () => any,
+      errorPopupBtnCb?: () => any,
+    ) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
-        setDatas(await getAPI(url, failCb));
+        setDatas(await getAPI(url, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -85,11 +95,14 @@ export function useGetDatasHook(
 /**
  * get method 커스텀 훅
  * @param {string} url api url
+ * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
 export function useGetDataHook(
   url: string | '',
+  successCb?: () => any,
   failCb?: () => any,
   errorPopupBtnCb?: () => any,
 ) {
@@ -104,26 +117,33 @@ export function useGetDataHook(
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
-  }, [url, errorPopupBtnCb]);
+  }, [url]);
 
   const useGetData = useCallback(
-    async (url: string, failCb?: () => any, errorPopupBtnCb?: () => any) => {
+    async (
+      url: string,
+      successCb?: () => any,
+      failCb?: () => any,
+      errorPopupBtnCb?: () => any,
+    ) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
-        setData(await getAPI(url, failCb));
+        setData(await getAPI(url, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     },
-    [],
+    [data],
   );
 
   return { data, useGetData };
@@ -133,12 +153,15 @@ export function useGetDataHook(
  * post method 커스텀 훅
  * @param {string} url api url
  * @param {any} params body 데이터
+ * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
 export function usePostDatasHook(
   url: string | '',
   params: any,
+  successCb?: () => any,
   failCb?: () => any,
   errorPopupBtnCb?: () => any,
 ) {
@@ -153,24 +176,27 @@ export function usePostDatasHook(
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setDatas(await postAPI(url, params, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
-  }, [url, errorPopupBtnCb]);
+  }, [url]);
 
   const usePostDatas = useCallback(
     async (
       url: string,
       params: any,
+      successCb?: () => any,
       failCb?: () => any,
       errorPopupBtnCb?: () => any,
     ) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
-        setDatas(await postAPI(url, params, failCb));
+        setDatas(await postAPI(url, params, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -187,12 +213,15 @@ export function usePostDatasHook(
  * post method 커스텀 훅
  * @param {string} url api url
  * @param {any} params body 데이터
+ * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
 export function usePostDataHook(
   url: string | '',
   params: any,
+  successCb?: () => any,
   failCb?: () => any,
   errorPopupBtnCb?: () => any,
 ) {
@@ -207,24 +236,27 @@ export function usePostDataHook(
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await postAPI(url, params, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
-  }, [url, errorPopupBtnCb]);
+  }, [url]);
 
   const usePostData = useCallback(
     async (
       url: string,
       params: any,
+      successCb?: () => any,
       failCb?: () => any,
       errorPopupBtnCb?: () => any,
     ) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
-        setData(await postAPI(url, params, failCb));
+        setData(await postAPI(url, params, failCb)); // FIXME: 수정 필요
+        successCb?.();
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
