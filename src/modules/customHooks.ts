@@ -6,7 +6,7 @@ import {
   useSetIsLoading,
   useSetMessage,
 } from 'middlewares/reduxToolkits/commonSlice';
-import { getAPI } from './apis';
+import { getAPI, postAPI } from './apis';
 
 /**
  * catch 절 처리 커스텀 훅 (팝업 발생)
@@ -41,10 +41,10 @@ export function useSetCatchClauseForErrorPopupHook() {
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
-export function useGetDatas(url: string, errorPopupBtnCb?: () => any) {
+export function useGetDatasHook(url: string, errorPopupBtnCb?: () => any) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
-  const [datas, setDatas] = useState<any[]>([]);
+  const [datas, setDatas] = useState<any[]>([]); // FIXME: 수정 필요
 
   useEffect(() => {
     (async () => {
@@ -59,24 +59,33 @@ export function useGetDatas(url: string, errorPopupBtnCb?: () => any) {
     })();
   }, [url, errorPopupBtnCb]);
 
-  return datas;
+  const useGetDatas = useCallback(
+    async (url: string, errorPopupBtnCb?: () => any) => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setDatas(await getAPI(url));
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    },
+    [datas],
+  );
+
+  return { datas, useGetDatas };
 }
 
 /**
  * data 가져오기 커스텀 훅
  * @param {string} url api url
- * @param {string} id data id
  * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
  * @returns
  */
-export function useGetData(
-  url: string,
-  id: string,
-  errorPopupBtnCb?: () => void,
-) {
+export function useGetDataHook(url: string, errorPopupBtnCb?: () => any) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any>(null); // FIXME: 수정 필요
 
   useEffect(() => {
     (async () => {
@@ -89,7 +98,113 @@ export function useGetData(
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
-  }, [url, id, errorPopupBtnCb]);
+  }, [url, errorPopupBtnCb]);
 
-  return data;
+  const useGetData = useCallback(
+    async (url: string, errorPopupBtnCb?: () => any) => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setData(await getAPI(url));
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    },
+    [],
+  );
+
+  return { data, useGetData };
+}
+
+/**
+ * datas post method 커스텀 훅
+ * @param {string} url api url
+ * @param {any} params body 데이터
+ * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * @returns
+ */
+export function usePostDatasHook(
+  url: string,
+  params: any,
+  errorPopupBtnCb?: () => any,
+) {
+  const dispatch = useDispatch();
+  const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const [datas, setDatas] = useState<any[]>([]); // FIXME: 수정 필요
+
+  useEffect(() => {
+    (async () => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setDatas(await postAPI(url, params)); // FIXME: 수정 필요
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    })();
+  }, [url, errorPopupBtnCb]);
+
+  const useGetDatas = useCallback(
+    async (url: string, params: any, errorPopupBtnCb?: () => any) => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setDatas(await postAPI(url, params));
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    },
+    [datas],
+  );
+
+  return { datas, useGetDatas };
+}
+
+/**
+ * data post method 커스텀 훅
+ * @param {string} url api url
+ * @param {any} params body 데이터
+ * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * @returns
+ */
+export function usePostDataHook(
+  url: string,
+  params: any,
+  errorPopupBtnCb?: () => any,
+) {
+  const dispatch = useDispatch();
+  const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const [data, setData] = useState<any>(null); // FIXME: 수정 필요
+
+  useEffect(() => {
+    (async () => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setData(await postAPI(url, params)); // FIXME: 수정 필요
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    })();
+  }, [url, errorPopupBtnCb]);
+
+  const useGetData = useCallback(
+    async (url: string, params: any, errorPopupBtnCb?: () => any) => {
+      try {
+        dispatch(useSetIsLoading({ isLoading: true }));
+        setData(await postAPI(url, params));
+      } catch (error: any) {
+        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      } finally {
+        dispatch(useSetIsLoading({ isLoading: false }));
+      }
+    },
+    [data],
+  );
+
+  return { data, useGetData };
 }

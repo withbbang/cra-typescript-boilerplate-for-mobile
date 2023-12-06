@@ -20,14 +20,6 @@ function ErrorPopup({
   message,
   useErrorBtnCb,
 }: CommonState): React.JSX.Element {
-  const buttonRef = useRef(
-    null,
-  ) as React.MutableRefObject<HTMLButtonElement | null>;
-
-  useEffect(() => {
-    buttonRef.current?.focus();
-  }, [isErrorPopupActive]);
-
   return (
     <div
       className={styles.background}
@@ -40,9 +32,7 @@ function ErrorPopup({
       <div className={styles.modalBody}>
         <span>{message}</span>
         <div>
-          <button onClick={useErrorBtnCb} ref={buttonRef}>
-            OK
-          </button>
+          <button onClick={useErrorBtnCb}>OK</button>
         </div>
       </div>
     </div>
