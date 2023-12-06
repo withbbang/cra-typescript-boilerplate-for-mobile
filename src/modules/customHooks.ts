@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  handleSetErrorBtn,
-  handleSetIsErrorPopupActive,
-  handleSetIsLoading,
-  handleSetMessage,
+  useSetErrorBtnCb,
+  useSetIsErrorPopupActive,
+  useSetIsLoading,
+  useSetMessage,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI } from './apis';
 
@@ -17,15 +17,13 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: () => any) => {
-      handleSetMessage({ message: error.message });
-      dispatch(handleSetIsErrorPopupActive({ isErrorPopupActive: true }));
+      useSetMessage({ message: error.message });
+      dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
-        handleSetErrorBtn({
+        useSetErrorBtnCb({
           callback: () => {
-            dispatch(
-              handleSetIsErrorPopupActive({ isErrorPopupActive: false }),
-            );
-            dispatch(handleSetMessage({ message: '' }));
+            dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
+            dispatch(useSetMessage({ message: '' }));
             errorPopupBtnCb?.();
           },
         }),
@@ -51,12 +49,12 @@ export function useGetDatas(url: string, errorPopupBtnCb?: () => any) {
   useEffect(() => {
     (async () => {
       try {
-        dispatch(handleSetIsLoading({ isLoading: true }));
+        dispatch(useSetIsLoading({ isLoading: true }));
         setDatas(await getAPI(url)); // FIXME: 수정 필요
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
-        dispatch(handleSetIsLoading({ isLoading: false }));
+        dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
   }, [url, errorPopupBtnCb]);
@@ -83,12 +81,12 @@ export function useGetData(
   useEffect(() => {
     (async () => {
       try {
-        dispatch(handleSetIsLoading({ isLoading: true }));
+        dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url)); // FIXME: 수정 필요
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
-        dispatch(handleSetIsLoading({ isLoading: false }));
+        dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
   }, [url, id, errorPopupBtnCb]);

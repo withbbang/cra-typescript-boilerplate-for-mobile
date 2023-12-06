@@ -5,9 +5,9 @@ export interface CommonState {
   isLoading?: boolean;
   isConfirmPopupActive?: boolean;
   isErrorPopupActive?: boolean;
-  handleConfirmBtn?: () => void;
-  handleCancelBtn?: () => void;
-  handleErrorBtn?: () => void;
+  useConfirmBtnCb?: () => void;
+  useCancelBtnCb?: () => void;
+  useErrorBtnCb?: () => void;
 }
 
 export const initialState: CommonState = {
@@ -15,35 +15,35 @@ export const initialState: CommonState = {
   isLoading: false,
   isErrorPopupActive: false,
   isConfirmPopupActive: false,
-  handleConfirmBtn: () => {},
-  handleCancelBtn: () => {},
-  handleErrorBtn: () => {},
+  useConfirmBtnCb: () => {},
+  useCancelBtnCb: () => {},
+  useErrorBtnCb: () => {},
 };
 
 const commonSlice = createSlice({
   name: 'common',
   initialState,
   reducers: {
-    handleSetMessage(state: CommonState, action) {
+    useSetMessage(state: CommonState, action) {
       state.message = action.payload.message;
     },
-    handleSetIsLoading(state: CommonState, action) {
+    useSetIsLoading(state: CommonState, action) {
       state.isLoading = action.payload.isLoading;
     },
-    handleSetIsConfirmPopupActive(state: CommonState, action) {
+    useSetIsConfirmPopupActive(state: CommonState, action) {
       state.isConfirmPopupActive = action.payload.isConfirmPopupActive;
     },
-    handleSetIsErrorPopupActive(state: CommonState, action) {
+    useSetIsErrorPopupActive(state: CommonState, action) {
       state.isErrorPopupActive = action.payload.isErrorPopupActive;
     },
-    handleSetConfirmBtn(state: CommonState, action) {
-      state.handleConfirmBtn = action.payload.callback;
+    useSetConfirmBtnCb(state: CommonState, action) {
+      state.useConfirmBtnCb = action.payload.callback;
     },
-    handleSetCancelBtn(state: CommonState, action) {
-      state.handleCancelBtn = action.payload.callback;
+    useSetCancelBtnCb(state: CommonState, action) {
+      state.useCancelBtnCb = action.payload.callback;
     },
-    handleSetErrorBtn(state: CommonState, action) {
-      state.handleErrorBtn = action.payload.callback;
+    useSetErrorBtnCb(state: CommonState, action) {
+      state.useErrorBtnCb = action.payload.callback;
     },
   },
   // API 리듀서들 비동기 상태값들 한번에 관리하기 위한 extraReducers 모음
@@ -53,13 +53,13 @@ const commonSlice = createSlice({
 });
 
 export const {
-  handleSetMessage,
-  handleSetIsLoading,
-  handleSetIsErrorPopupActive,
-  handleSetIsConfirmPopupActive,
-  handleSetConfirmBtn,
-  handleSetCancelBtn,
-  handleSetErrorBtn,
+  useSetMessage,
+  useSetIsLoading,
+  useSetIsErrorPopupActive,
+  useSetIsConfirmPopupActive,
+  useSetConfirmBtnCb,
+  useSetCancelBtnCb,
+  useSetErrorBtnCb,
 } = commonSlice.actions;
 
 export default commonSlice.reducer;
