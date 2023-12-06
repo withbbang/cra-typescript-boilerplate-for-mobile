@@ -17,7 +17,6 @@ function getAPI(url: string, failCb?: () => any): Promise<any> {
       },
     })
       .then((response) => {
-        console.warn(response);
         if (response.status < 400) {
           return response.json();
         }
