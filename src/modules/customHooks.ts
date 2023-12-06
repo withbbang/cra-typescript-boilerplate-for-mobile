@@ -146,7 +146,7 @@ export function usePostDatasHook(
     })();
   }, [url, errorPopupBtnCb]);
 
-  const useGetDatas = useCallback(
+  const usePostDatas = useCallback(
     async (url: string, params: any, errorPopupBtnCb?: () => any) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
@@ -160,7 +160,7 @@ export function usePostDatasHook(
     [datas],
   );
 
-  return { datas, useGetDatas };
+  return { datas, usePostDatas };
 }
 
 /**
@@ -192,7 +192,7 @@ export function usePostDataHook(
     })();
   }, [url, errorPopupBtnCb]);
 
-  const useGetData = useCallback(
+  const usePostData = useCallback(
     async (url: string, params: any, errorPopupBtnCb?: () => any) => {
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
@@ -206,5 +206,5 @@ export function usePostDataHook(
     [data],
   );
 
-  return { data, useGetData };
+  return { data, usePostData };
 }
