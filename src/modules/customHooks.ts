@@ -17,7 +17,7 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: () => any) => {
-      useSetMessage({ message: error.message });
+      dispatch(useSetMessage({ message: error.message }));
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
         useSetErrorBtnCb({

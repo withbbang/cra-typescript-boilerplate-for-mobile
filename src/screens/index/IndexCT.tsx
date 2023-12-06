@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { CustomWindow } from 'modules/types';
+import { useGetDatasHook } from 'modules/customHooks';
 import IndexPT from './IndexPT';
 
 function IndexCT({}: typeIndexCT): React.JSX.Element {
+  const { datas, useGetDatas } = useGetDatasHook('http://localhost:3000/lwekj');
+
   useEffect(() => {
     const customWindow = window as CustomWindow;
     customWindow.goBack = handleGoBack;
