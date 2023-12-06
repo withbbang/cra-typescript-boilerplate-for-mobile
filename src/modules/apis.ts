@@ -1,9 +1,12 @@
+import { handleThrowCustomErrorInAPI, handleThrowErrorInAPI } from './utils';
+
 /**
  * GET API
  * @param {string} url 요청 URL
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
-function getAPI(url: string): Promise<any> {
+function getAPI(url: string, failCb?: () => any): Promise<any> {
   return new Promise((resolve, reject) => {
     fetch(url, {
       method: 'GET',
@@ -18,10 +21,15 @@ function getAPI(url: string): Promise<any> {
           return response.json();
         }
 
-        throw Error('Error Occured');
+        return handleThrowErrorInAPI({ status: response.status, failCb });
       })
       .then((result) => {
         console.debug('result: ', result);
+        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+
+        if (code !== '000000')
+          handleThrowCustomErrorInAPI({ code, message, failCb });
+
         resolve(result);
       })
       .catch((error) => {
@@ -35,9 +43,10 @@ function getAPI(url: string): Promise<any> {
  * POST API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
-function postAPI(url: string, payload: any): Promise<any> {
+function postAPI(url: string, payload: any, failCb?: () => any): Promise<any> {
   console.debug('parameters: ', payload);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -54,10 +63,15 @@ function postAPI(url: string, payload: any): Promise<any> {
           return response.json();
         }
 
-        throw Error('Error Occured');
+        return handleThrowErrorInAPI({ status: response.status, failCb });
       })
       .then((result) => {
         console.debug('result: ', result);
+        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+
+        if (code !== '000000')
+          handleThrowCustomErrorInAPI({ code, message, failCb });
+
         resolve(result);
       })
       .catch((error) => {
@@ -71,9 +85,10 @@ function postAPI(url: string, payload: any): Promise<any> {
  * PUT API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
-function putAPI(url: string, payload: any): Promise<any> {
+function putAPI(url: string, payload: any, failCb?: () => any): Promise<any> {
   console.debug('parameters: ', payload);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -90,10 +105,15 @@ function putAPI(url: string, payload: any): Promise<any> {
           return response.json();
         }
 
-        throw Error('Error Occured');
+        return handleThrowErrorInAPI({ status: response.status, failCb });
       })
       .then((result) => {
         console.debug('result: ', result);
+        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+
+        if (code !== '000000')
+          handleThrowCustomErrorInAPI({ code, message, failCb });
+
         resolve(result);
       })
       .catch((error) => {
@@ -107,9 +127,14 @@ function putAPI(url: string, payload: any): Promise<any> {
  * DELETE API
  * @param {string} url 요청 URL
  * @param {any} payload 요청 DATA
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
  * @returns {Promise<any>}
  */
-function deleteAPI(url: string, payload: any): Promise<any> {
+function deleteAPI(
+  url: string,
+  payload: any,
+  failCb?: () => any,
+): Promise<any> {
   console.debug('parameters: ', payload);
   return new Promise((resolve, reject) => {
     fetch(url, {
@@ -126,10 +151,15 @@ function deleteAPI(url: string, payload: any): Promise<any> {
           return response.json();
         }
 
-        throw Error('Error Occured');
+        return handleThrowErrorInAPI({ status: response.status, failCb });
       })
       .then((result) => {
         console.debug('result: ', result);
+        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+
+        if (code !== '000000')
+          handleThrowCustomErrorInAPI({ code, message, failCb });
+
         resolve(result);
       })
       .catch((error) => {
