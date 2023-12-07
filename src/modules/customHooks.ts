@@ -7,9 +7,11 @@ import {
   useSetMessage,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
+import { TypeGetAPIHookParams, TypePostAPIHookParams } from './types';
 
 /**
- * catch 절 처리 커스텀 훅
+ * [catch 절 처리 커스텀 훅]
+ *
  * @returns
  */
 export function useSetCatchClauseForErrorPopupHook() {
@@ -36,19 +38,19 @@ export function useSetCatchClauseForErrorPopupHook() {
 }
 
 /**
- * get method 커스텀 훅
- * @param {string} url api url
- * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
- * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
- * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * [get method 커스텀 훅 (배열 값 호출)]
+ *
+ * @param {TypeGetAPIHookParams} params
+ * url, API 성공시 바로 실행하는 콜백, API 실패시 바로 실행하는 콜백, 에러팝업 버튼 콜백을 담고 있는 객체
+ *
  * @returns
  */
-export function useGetDatasHook(
-  url: string | '',
-  successCb?: () => any,
-  failCb?: () => any,
-  errorPopupBtnCb?: () => any,
-) {
+export function useGetDatasHook({
+  url,
+  successCb,
+  failCb,
+  errorPopupBtnCb,
+}: TypeGetAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [datas, setDatas] = useState<any[]>([]); // FIXME: 수정 필요
@@ -70,12 +72,14 @@ export function useGetDatasHook(
   }, [url]);
 
   const useGetDatas = useCallback(
-    async (
-      url: string,
-      successCb?: () => any,
-      failCb?: () => any,
-      errorPopupBtnCb?: () => any,
-    ) => {
+    async ({
+      url,
+      successCb,
+      failCb,
+      errorPopupBtnCb,
+    }: TypeGetAPIHookParams) => {
+      if (!url) return;
+
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setDatas(await getAPI(url, failCb)); // FIXME: 수정 필요
@@ -93,19 +97,19 @@ export function useGetDatasHook(
 }
 
 /**
- * get method 커스텀 훅
- * @param {string} url api url
- * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
- * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
- * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * [get method 커스텀 훅 (단일 값 호출)]
+ *
+ * @param {TypeGetAPIHookParams} params
+ * url, API 성공시 바로 실행하는 콜백, API 실패시 바로 실행하는 콜백, 에러팝업 버튼 콜백을 담고 있는 객체
+ *
  * @returns
  */
-export function useGetDataHook(
-  url: string | '',
-  successCb?: () => any,
-  failCb?: () => any,
-  errorPopupBtnCb?: () => any,
-) {
+export function useGetDataHook({
+  url,
+  successCb,
+  failCb,
+  errorPopupBtnCb,
+}: TypeGetAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>(null); // FIXME: 수정 필요
@@ -127,12 +131,14 @@ export function useGetDataHook(
   }, [url]);
 
   const useGetData = useCallback(
-    async (
-      url: string,
-      successCb?: () => any,
-      failCb?: () => any,
-      errorPopupBtnCb?: () => any,
-    ) => {
+    async ({
+      url,
+      successCb,
+      failCb,
+      errorPopupBtnCb,
+    }: TypeGetAPIHookParams) => {
+      if (!url) return;
+
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb)); // FIXME: 수정 필요
@@ -150,21 +156,21 @@ export function useGetDataHook(
 }
 
 /**
- * post method 커스텀 훅
- * @param {string} url api url
- * @param {any} params body 데이터
- * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
- * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
- * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * [post method 커스텀 훅 (배열 값 호출)]
+ *
+ * @param {TypeGetAPIHookParams} params
+ * url, body 데이터, API 성공시 바로 실행하는 콜백,
+ * API 실패시 바로 실행하는 콜백, 에러팝업 버튼 콜백을 담고 있는 객체
+ *
  * @returns
  */
-export function usePostDatasHook(
-  url: string | '',
-  params: any,
-  successCb?: () => any,
-  failCb?: () => any,
-  errorPopupBtnCb?: () => any,
-) {
+export function usePostDatasHook({
+  url,
+  params,
+  successCb,
+  failCb,
+  errorPopupBtnCb,
+}: TypePostAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [datas, setDatas] = useState<any[]>([]); // FIXME: 수정 필요
@@ -186,13 +192,15 @@ export function usePostDatasHook(
   }, [url]);
 
   const usePostDatas = useCallback(
-    async (
-      url: string,
-      params: any,
-      successCb?: () => any,
-      failCb?: () => any,
-      errorPopupBtnCb?: () => any,
-    ) => {
+    async ({
+      url,
+      params,
+      successCb,
+      failCb,
+      errorPopupBtnCb,
+    }: TypePostAPIHookParams) => {
+      if (!url) return;
+
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setDatas(await postAPI(url, params, failCb)); // FIXME: 수정 필요
@@ -210,21 +218,21 @@ export function usePostDatasHook(
 }
 
 /**
- * post method 커스텀 훅
- * @param {string} url api url
- * @param {any} params body 데이터
- * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
- * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
- * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ * [post method 커스텀 훅 (단일 값 호출)]
+ *
+ * @param {TypeGetAPIHookParams} params
+ * url, body 데이터, API 성공시 바로 실행하는 콜백,
+ * API 실패시 바로 실행하는 콜백, 에러팝업 버튼 콜백을 담고 있는 객체
+ *
  * @returns
  */
-export function usePostDataHook(
-  url: string | '',
-  params: any,
-  successCb?: () => any,
-  failCb?: () => any,
-  errorPopupBtnCb?: () => any,
-) {
+export function usePostDataHook({
+  url,
+  params,
+  successCb,
+  failCb,
+  errorPopupBtnCb,
+}: TypePostAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>(null); // FIXME: 수정 필요
@@ -246,13 +254,15 @@ export function usePostDataHook(
   }, [url]);
 
   const usePostData = useCallback(
-    async (
-      url: string,
-      params: any,
-      successCb?: () => any,
-      failCb?: () => any,
-      errorPopupBtnCb?: () => any,
-    ) => {
+    async ({
+      url,
+      params,
+      successCb,
+      failCb,
+      errorPopupBtnCb,
+    }: TypePostAPIHookParams) => {
+      if (!url) return;
+
       try {
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await postAPI(url, params, failCb)); // FIXME: 수정 필요
