@@ -69,6 +69,26 @@ export interface TypePostAPIHookParams {
 }
 
 /**
+ * [Post API 확인 팝업 호출 커스텀 훅 파라미터 타입]
+ *
+ * @param {string | undefined} url api url
+ * @param {any} params body 데이터
+ * @param {Function | undefined} successCb API 성공시 바로 실행하는 콜백
+ * @param {Function | undefined} cancelCb 확인 팝업 취소 버튼 콜백
+ * @param {Function | undefined} failCb API 실패시 바로 실행하는 콜백
+ * @param {Function | undefined} errorPopupBtnCb 에러팝업 버튼 콜백
+ */
+export interface TypePostAPIByConfirmPopupHook {
+  message: string;
+  url: string;
+  params: any;
+  successCb?: () => any;
+  cancelCb?: () => any;
+  failCb?: () => any;
+  errorPopupBtnCb?: () => any;
+}
+
+/**
  * [Javascript Interface 호출 전용 타입]
  *
  * Web -> Native 호출을 위함

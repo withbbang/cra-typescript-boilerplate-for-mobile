@@ -2,12 +2,19 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   useSetErrorBtnCb,
+  useSetConfirmBtnCb,
+  useSetCancelBtnCb,
   useSetIsErrorPopupActive,
+  useSetIsConfirmPopupActive,
   useSetIsLoading,
   useSetMessage,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
-import { TypeGetAPIHookParams, TypePostAPIHookParams } from './types';
+import {
+  TypeGetAPIHookParams,
+  TypePostAPIByConfirmPopupHook,
+  TypePostAPIHookParams,
+} from './types';
 
 /**
  * [catch 절 처리 커스텀 훅]
@@ -277,4 +284,61 @@ export function usePostDataHook({
   );
 
   return { data, usePostData };
+}
+
+/**
+ * [post method 확인 팝업 커스텀 훅]
+ * @returns
+ */
+export function usePostDataByConfirmPopupHook() {
+  const dispatch = useDispatch();
+  const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const [data, setData] = useState<any>();
+
+  const useSetActivePostDataByConfirmPopup = useCallback(
+    ({
+      message,
+      url,
+      params,
+      successCb,
+      cancelCb,
+      failCb,
+      errorPopupBtnCb,
+    }: TypePostAPIByConfirmPopupHook) => {
+      dispatch(useSetMessage({ message }));
+      dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
+      dispatch(
+        useSetConfirmBtnCb({
+          callback: async () => {
+            try {
+              dispatch(useSetIsLoading({ isLoading: true }));
+              setData(await postAPI(url, params, failCb));
+              successCb?.();
+            } catch (error: any) {
+              useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+            } finally {
+              dispatch(
+                useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
+              );
+              dispatch(useSetIsLoading({ isLoading: false }));
+            }
+          },
+        }),
+      );
+      dispatch(
+        useSetCancelBtnCb({
+          callback: () => {
+            cancelCb?.();
+            dispatch(
+              useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
+            );
+            dispatch(useSetMessage({ message: '' }));
+          },
+        }),
+      );
+    },
+    [data],
+  );
+
+  return { data, useSetActivePostDataByConfirmPopup };
 }
