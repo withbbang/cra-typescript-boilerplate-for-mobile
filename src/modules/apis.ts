@@ -25,12 +25,15 @@ function getAPI(url: string, failCb?: () => any): Promise<any> {
       })
       .then((result) => {
         console.debug('result: ', result);
-        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+        const {
+          result: { code, message },
+          data,
+        } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(result);
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -67,12 +70,15 @@ function postAPI(url: string, payload: any, failCb?: () => any): Promise<any> {
       })
       .then((result) => {
         console.debug('result: ', result);
-        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+        const {
+          result: { code, message },
+          data,
+        } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(result);
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -109,12 +115,15 @@ function putAPI(url: string, payload: any, failCb?: () => any): Promise<any> {
       })
       .then((result) => {
         console.debug('result: ', result);
-        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+        const {
+          result: { code, message },
+          data,
+        } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(result);
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
@@ -155,12 +164,15 @@ function deleteAPI(
       })
       .then((result) => {
         console.debug('result: ', result);
-        const { code, message } = result; // TODO: 결과 데이터를 담는 값 일반화 필요 ex) data / datas
+        const {
+          result: { code, message },
+          data,
+        } = result;
 
         if (code !== '000000')
           handleThrowCustomErrorInAPI({ code, message, failCb });
 
-        resolve(result);
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);
