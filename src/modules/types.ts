@@ -74,7 +74,7 @@ export interface TypePostAPIHookParams {
  * @type {string | undefined} url: api url
  * @type {any} params: body 데이터
  * @type {Function | undefined} successCb: API 성공시 바로 실행하는 콜백
- * @type {Function | undefined} cancelCb: 확인 팝업 취소 버튼 콜백
+ * @type {Function | undefined} cancelBtnCb: 확인 팝업 취소 버튼 콜백
  * @type {Function | undefined} failCb: API 실패시 바로 실행하는 콜백
  * @type {Function | undefined} errorPopupBtnCb: 에러팝업 버튼 콜백
  */
@@ -83,7 +83,7 @@ export interface TypePostAPIByConfirmPopupHook {
   url: string;
   params: any;
   successCb?: () => any;
-  cancelCb?: () => any;
+  cancelBtnCb?: () => any;
   failCb?: () => any;
   errorPopupBtnCb?: () => any;
 }

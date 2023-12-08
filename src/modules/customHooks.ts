@@ -301,7 +301,7 @@ export function usePostDataByConfirmPopupHook() {
       url,
       params,
       successCb,
-      cancelCb,
+      cancelBtnCb,
       failCb,
       errorPopupBtnCb,
     }: TypePostAPIByConfirmPopupHook) => {
@@ -328,7 +328,7 @@ export function usePostDataByConfirmPopupHook() {
       dispatch(
         useSetCancelBtnCb({
           callback: () => {
-            cancelCb?.();
+            cancelBtnCb?.();
             dispatch(
               useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
             );

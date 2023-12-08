@@ -13,7 +13,7 @@ function IndexCT({}: typeIndexCT): React.JSX.Element {
       url: '/wlekfj',
       params: {},
       successCb: () => console.warn('called successCb'),
-      cancelCb: () => console.warn('called cancelCb'),
+      cancelBtnCb: () => console.warn('called cancelBtnCb'),
       failCb: () => console.warn('called failCb'),
       errorPopupBtnCb: () => console.warn('called errorPopupBtnCb'),
     });
