@@ -4,7 +4,7 @@ import { CustomWindow } from 'modules/types';
 import { usePostDataByConfirmPopupHook } from 'modules/customHooks';
 import IndexPT from './IndexPT';
 
-function IndexCT({}: typeIndexCT): React.JSX.Element {
+function IndexCT({}: IndexCTProps): React.JSX.Element {
   const { useSetActivePostDataByConfirmPopup } =
     usePostDataByConfirmPopupHook();
   const onClick = () => {
@@ -40,6 +40,6 @@ function IndexCT({}: typeIndexCT): React.JSX.Element {
   return <IndexPT onClick={onClick} />;
 }
 
-interface typeIndexCT extends CommonState {}
+interface IndexCTProps extends CommonState {}
 
 export default IndexCT;

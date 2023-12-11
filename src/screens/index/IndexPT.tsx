@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './Index.module.scss';
 
-function IndexPT({ onClick }: typeIndexPT): React.JSX.Element {
+function IndexPT({ onClick }: IndexPTProps): React.JSX.Element {
   return (
     <div className={styles.wrap}>
       <h1 onClick={onClick}>Index Page</h1>
@@ -11,7 +11,7 @@ function IndexPT({ onClick }: typeIndexPT): React.JSX.Element {
   );
 }
 
-interface typeIndexPT {
+interface IndexPTProps {
   onClick: () => void;
 }
 
