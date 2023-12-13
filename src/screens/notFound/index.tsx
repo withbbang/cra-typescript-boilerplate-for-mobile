@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SVG from 'modules/SVG';
 import styles from './NotFound.module.scss';
 
-function NotFound(): React.JSX.Element {
+function NotFound({}: NotFoundProps): React.JSX.Element {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -26,5 +26,7 @@ function NotFound(): React.JSX.Element {
     </div>
   );
 }
+
+interface NotFoundProps {}
 
 export default NotFound;
