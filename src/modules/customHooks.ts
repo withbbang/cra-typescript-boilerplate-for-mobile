@@ -54,6 +54,7 @@ export function useSetCatchClauseForErrorPopupHook() {
  */
 export function useGetDataHook({
   url,
+  checkValidatioinCb,
   successCb,
   failCb,
   errorPopupBtnCb,
@@ -67,6 +68,7 @@ export function useGetDataHook({
       if (!url) return;
 
       try {
+        checkValidatioinCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb));
         successCb?.();
@@ -81,6 +83,7 @@ export function useGetDataHook({
   const useGetData = useCallback(
     async ({
       url,
+      checkValidatioinCb,
       successCb,
       failCb,
       errorPopupBtnCb,
@@ -115,6 +118,7 @@ export function useGetDataHook({
 export function usePostDataHook({
   url,
   params,
+  checkValidatioinCb,
   successCb,
   failCb,
   errorPopupBtnCb,
@@ -128,6 +132,7 @@ export function usePostDataHook({
       if (!url) return;
 
       try {
+        checkValidatioinCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await postAPI(url, params, failCb));
         successCb?.();
@@ -150,6 +155,7 @@ export function usePostDataHook({
       if (!url) return;
 
       try {
+        checkValidatioinCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await postAPI(url, params, failCb));
         successCb?.();
