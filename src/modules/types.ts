@@ -4,6 +4,7 @@
  * Native -> Web 호출을 위함
  */
 export interface CustomWindow extends Window {
+  webkit?: any;
   goBack?: (data?: any) => any;
   onResult?: (data?: any) => any;
   onResume?: (data?: any) => any;
@@ -100,11 +101,13 @@ export interface TypePostAPIByConfirmPopupHook {
  * @type {string} action: 액션 이름
  * @type {string} bridge: 브릿지 이름
  * @type {any | undefined} data: Native에 전달할 데이터
+ * @type {boolean | undefined} hasCb: js interface 요청 후 콜백 있는지 여부
  */
 export interface TypeJavascriptInterface {
   action: string;
   bridge: string;
   data?: any;
+  hasCb?: boolean;
 }
 
 export interface SVGProps {

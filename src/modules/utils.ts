@@ -1,4 +1,5 @@
 import {
+  CustomWindow,
   TypeJavascriptInterface,
   TypeThrowCustomErrorInAPI,
   TypeThrowErrorInAPI,
@@ -88,26 +89,118 @@ export function handleGetOsType(): string {
 }
 
 /**
- * [Javascript Interface 호출 함수]
+ * [AOS용 Javascript Interface 호출 함수]
  *
- * @param {TypeJavascriptInterface} params action, bridge, data 들고 있는 객체
- * @returns
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb 들고 있는 객체
+ * @returns {Promise<any>}
  */
-export function handleJavascriptInterface({
+export function handleJavascriptInterfaceForAOS({
+  bridge,
   action,
-  bridge = 'android', // FIXME: 나중에 정해지면 초기값 변경해야함
   data,
-}: TypeJavascriptInterface) {
+}: TypeJavascriptInterface): Promise<any> {
   return new Promise((resolve, reject) => {
     const interfaceNm = bridge as keyof Window;
 
-    if (window[interfaceNm] && window[interfaceNm][action]) {
-      if (data !== undefined)
-        resolve(window[interfaceNm][action](JSON.stringify(data)));
-      else resolve(window[interfaceNm][action]);
-    } else {
-      console.error(`앱 통신(${interfaceNm} ${action}) 에러`);
-      reject();
+    try {
+      if (window[interfaceNm] && window[interfaceNm][action]) {
+        if (data) resolve(window[interfaceNm][action](data));
+        else resolve(window[interfaceNm][action]());
+      } else {
+        throw Error(`앱 통신(${interfaceNm} ${action}) 에러`);
+      }
+    } catch (error: any) {
+      console.error(error);
+      reject(error);
     }
   });
+}
+
+/**
+ * [IOS용 Javascript Interface 호출 함수]
+ *
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb 들고 있는 객체
+ * @returns {Promise<any>}
+ */
+export function handleJavascriptInterfaceForIOS({
+  bridge,
+  action,
+  data,
+  hasCb,
+}: TypeJavascriptInterface): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const { webkit } = window as CustomWindow;
+    const callbackName = `callback${action.replace(/\b[a-z]/, (letter) =>
+      letter.toUpperCase(),
+    )}`;
+
+    try {
+      if (webkit.messageHandlers[bridge])
+        if (hasCb) {
+          (window as any)[callbackName] = resolve;
+
+          webkit.messageHandlers[bridge].postMessage({
+            action,
+            data,
+          });
+        } else
+          resolve(
+            webkit.messageHandlers[bridge].postMessage({
+              action,
+              data,
+            }),
+          );
+      else throw Error(`앱 통신(${bridge}) 에러`);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+}
+
+/**
+ * [Javascript Interface 호출 함수]
+ *
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb 들고 있는 객체
+ * @returns {Promise<any>}
+ */
+export async function handleJavascriptInterface({
+  bridge,
+  action,
+  data,
+  hasCb,
+}: TypeJavascriptInterface): Promise<any> {
+  if (handleGetOsType() === 'AND')
+    return handleJavascriptInterfaceForAOS({ bridge, action, data });
+
+  if (handleGetOsType() === 'IOS')
+    return handleJavascriptInterfaceForIOS({ bridge, action, data, hasCb });
+
+  return '';
+}
+
+/**
+ * [javascript interface 리턴값 파싱 함수]
+ *
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb 들고 있는 객체
+ * @returns
+ */
+export async function handleParseDataFromJSInterface({
+  bridge,
+  action,
+  data,
+  hasCb,
+}: TypeJavascriptInterface): Promise<any> {
+  const value = await handleJavascriptInterface({
+    bridge,
+    action,
+    data,
+    hasCb,
+  });
+
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    return value;
+  }
 }
