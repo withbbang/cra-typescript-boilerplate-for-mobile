@@ -12,9 +12,11 @@ import {
 import { getAPI, postAPI } from './apis';
 import {
   TypeGetAPIHookParams,
+  TypeJavascriptInterface,
   TypePostAPIByConfirmPopupHook,
   TypePostAPIHookParams,
 } from './types';
+import { handleParseDataFromJSInterface } from './utils';
 
 /**
  * [catch 절 처리 커스텀 훅]
@@ -226,4 +228,29 @@ export function usePostDataByConfirmPopupHook() {
   );
 
   return { data, useSetActivePostDataByConfirmPopup };
+}
+
+/**
+ * [Javascript Interface 에러팝업 처리용 Hook]
+ */
+export function useJavascriptInterfaceHook() {
+  const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+
+  const useJavascriptInterface = useCallback(
+    async ({ bridge, action, data, hasCb }: TypeJavascriptInterface) => {
+      try {
+        return await handleParseDataFromJSInterface({
+          bridge,
+          action,
+          data,
+          hasCb,
+        });
+      } catch (error: any) {
+        return useSetCatchClauseForErrorPopup(error);
+      }
+    },
+    [],
+  );
+
+  return useJavascriptInterface;
 }
