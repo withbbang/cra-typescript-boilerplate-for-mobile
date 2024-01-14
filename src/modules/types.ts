@@ -1,3 +1,7 @@
+export interface TypeKeyValueForm {
+  [key: string]: number | string;
+}
+
 /**
  * [커스텀 window 타입]
  *
