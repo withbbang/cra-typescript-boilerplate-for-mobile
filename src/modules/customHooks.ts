@@ -125,6 +125,7 @@ export function useGetDataHook({
       if (!url) return;
 
       try {
+        checkValidatioinCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb));
         successCb?.();
@@ -161,46 +162,28 @@ export function usePostDataHook({
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>(null);
 
-  useEffect(() => {
-    (async () => {
-      if (!url) return;
+  const usePostData = useCallback(async () => {
+    if (!url) return;
 
-      try {
-        checkValidatioinCb?.();
-        dispatch(useSetIsLoading({ isLoading: true }));
-        setData(await postAPI(url, params, failCb));
-        successCb?.();
-      } catch (error: any) {
-        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
-      } finally {
-        dispatch(useSetIsLoading({ isLoading: false }));
-      }
-    })();
-  }, []);
-
-  const usePostData = useCallback(
-    async ({
-      url,
-      params,
-      successCb,
-      failCb,
-      errorPopupBtnCb,
-    }: TypePostAPIHookParams) => {
-      if (!url) return;
-
-      try {
-        checkValidatioinCb?.();
-        dispatch(useSetIsLoading({ isLoading: true }));
-        setData(await postAPI(url, params, failCb));
-        successCb?.();
-      } catch (error: any) {
-        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
-      } finally {
-        dispatch(useSetIsLoading({ isLoading: false }));
-      }
-    },
-    [data],
-  );
+    try {
+      checkValidatioinCb?.();
+      dispatch(useSetIsLoading({ isLoading: true }));
+      setData(await postAPI(url, params, failCb));
+      successCb?.();
+    } catch (error: any) {
+      useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+    } finally {
+      dispatch(useSetIsLoading({ isLoading: false }));
+    }
+  }, [
+    url,
+    params,
+    checkValidatioinCb,
+    successCb,
+    failCb,
+    errorPopupBtnCb,
+    data,
+  ]);
 
   return { data, usePostData };
 }
@@ -209,55 +192,59 @@ export function usePostDataHook({
  * [post method 확인 팝업 커스텀 훅]
  * @returns
  */
-export function usePostDataByConfirmPopupHook() {
+export function usePostDataByConfirmPopupHook({
+  message,
+  url,
+  params,
+  successCb,
+  cancelBtnCb,
+  failCb,
+  errorPopupBtnCb,
+}: TypePostAPIByConfirmPopupHook) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>();
 
-  const useSetActivePostDataByConfirmPopup = useCallback(
-    ({
-      message,
-      url,
-      params,
-      successCb,
-      cancelBtnCb,
-      failCb,
-      errorPopupBtnCb,
-    }: TypePostAPIByConfirmPopupHook) => {
-      dispatch(useSetMessage({ message }));
-      dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
-      dispatch(
-        useSetConfirmBtnCb({
-          callback: async () => {
-            try {
-              dispatch(useSetIsLoading({ isLoading: true }));
-              setData(await postAPI(url, params, failCb));
-              successCb?.();
-            } catch (error: any) {
-              useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
-            } finally {
-              dispatch(
-                useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
-              );
-              dispatch(useSetIsLoading({ isLoading: false }));
-            }
-          },
-        }),
-      );
-      dispatch(
-        useSetCancelBtnCb({
-          callback: () => {
-            cancelBtnCb?.();
+  const useSetActivePostDataByConfirmPopup = useCallback(() => {
+    dispatch(useSetMessage({ message }));
+    dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
+    dispatch(
+      useSetConfirmBtnCb({
+        callback: async () => {
+          try {
+            dispatch(useSetIsLoading({ isLoading: true }));
+            setData(await postAPI(url, params, failCb));
+            successCb?.();
+          } catch (error: any) {
+            useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+          } finally {
             dispatch(
               useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
             );
-            dispatch(useSetMessage({ message: '' }));
-          },
-        }),
-      );
-    },
-    [data],
-  );
+            dispatch(useSetIsLoading({ isLoading: false }));
+          }
+        },
+      }),
+    );
+    dispatch(
+      useSetCancelBtnCb({
+        callback: () => {
+          cancelBtnCb?.();
+          dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: false }));
+          dispatch(useSetMessage({ message: '' }));
+        },
+      }),
+    );
+  }, [
+    message,
+    url,
+    params,
+    successCb,
+    cancelBtnCb,
+    failCb,
+    errorPopupBtnCb,
+    data,
+  ]);
 
   return { data, useSetActivePostDataByConfirmPopup };
 }
