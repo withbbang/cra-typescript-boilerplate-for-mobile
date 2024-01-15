@@ -1,20 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface CommonState {
-  message?: string;
-  errorMessage?: string;
-  isLoading?: boolean;
-  isConfirmPopupActive?: boolean;
-  confirmBtnText?: string;
-  cancelBtnText?: string;
-  isErrorPopupActive?: boolean;
-  errorBtnText?: string;
-  useConfirmBtnCb?: () => any;
-  useCancelBtnCb?: () => any;
-  useConfirmBtnText?: (text: string) => any;
-  useCancelBtnText?: (text: string) => any;
-  useErrorBtnCb?: () => any;
-  useErrorBtnText?: (text: string) => any;
+  message?: string; // 일반 팝업 메세지
+  errorMessage?: string; // 에러 팝업 메세지
+  isLoading?: boolean; // 로딩 여부
+  isConfirmPopupActive?: boolean; // 확인 팝업 활성 여부
+  confirmBtnText?: string; // 확인 팝업의 확인 버튼 텍스트
+  cancelBtnText?: string; // 확인 팝업의 취소 버튼 텍스트
+  isErrorPopupActive?: boolean; // 에러 팝업 활성 여부
+  errorBtnText?: string; // 에러 팝업의 버튼 텍스트
+  useConfirmBtnCb?: () => any; // 확인 팝업의 확인 버튼 콜백
+  useCancelBtnCb?: () => any; // 확인 팝업의 취소 버튼 콜백
+  useErrorBtnCb?: () => any; // 에러 팝업의 버튼 콜백
 }
 
 export const initialState: CommonState = {
@@ -28,46 +25,54 @@ export const initialState: CommonState = {
   errorBtnText: '',
   useConfirmBtnCb: () => {},
   useCancelBtnCb: () => {},
-  useConfirmBtnText: () => {},
-  useCancelBtnText: () => {},
   useErrorBtnCb: () => {},
-  useErrorBtnText: () => {},
 };
 
 const commonSlice = createSlice({
   name: 'common',
   initialState,
   reducers: {
+    // 일반 팝업 메세지 설정
     useSetMessage(state: CommonState, action) {
       state.message = action.payload.message;
     },
+    // 에러 팝업 메세지 설정
     useSetErrorMessage(state: CommonState, action) {
       state.errorMessage = action.payload.errorMessage;
     },
+    // 로딩 여부 설정
     useSetIsLoading(state: CommonState, action) {
       state.isLoading = action.payload.isLoading;
     },
+    // 확인 팝업 활성 여부 설정
     useSetIsConfirmPopupActive(state: CommonState, action) {
       state.isConfirmPopupActive = action.payload.isConfirmPopupActive;
     },
+    // 확인 팝업의 확인 버튼 텍스트 설정
     useSetIsErrorPopupActive(state: CommonState, action) {
       state.isErrorPopupActive = action.payload.isErrorPopupActive;
     },
+    // 확인 팝업의 취소 버튼 텍스트 설정
     useSetConfirmBtnCb(state: CommonState, action) {
       state.useConfirmBtnCb = action.payload.callback;
     },
+    // 에러 팝업 활성 여부 설정
     useSetCancelBtnCb(state: CommonState, action) {
       state.useCancelBtnCb = action.payload.callback;
     },
+    // 에러 팝업의 버튼 텍스트 설정
     useSetConfirmBtnText(state: CommonState, action) {
       state.confirmBtnText = action.payload.text;
     },
+    // 확인 팝업의 확인 버튼 콜백 설정
     useSetCancelBtnText(state: CommonState, action) {
       state.cancelBtnText = action.payload.text;
     },
+    // 확인 팝업의 취소 버튼 콜백 설정
     useSetErrorBtnCb(state: CommonState, action) {
       state.useErrorBtnCb = action.payload.callback;
     },
+    // 에러 팝업의 버튼 콜백 설정
     useSetErrorBtnText(state: CommonState, action) {
       state.errorBtnText = action.payload.text;
     },
