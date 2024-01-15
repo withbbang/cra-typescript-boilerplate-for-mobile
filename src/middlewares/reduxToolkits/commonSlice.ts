@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface CommonState {
   message?: string;
+  errorMessage?: string;
   isLoading?: boolean;
   isConfirmPopupActive?: boolean;
   confirmBtnText?: string;
@@ -18,6 +19,7 @@ export interface CommonState {
 
 export const initialState: CommonState = {
   message: '',
+  errorMessage: '',
   isLoading: false,
   isConfirmPopupActive: false,
   confirmBtnText: '',
@@ -38,6 +40,9 @@ const commonSlice = createSlice({
   reducers: {
     useSetMessage(state: CommonState, action) {
       state.message = action.payload.message;
+    },
+    useSetErrorMessage(state: CommonState, action) {
+      state.errorMessage = action.payload.errorMessage;
     },
     useSetIsLoading(state: CommonState, action) {
       state.isLoading = action.payload.isLoading;
@@ -75,6 +80,7 @@ const commonSlice = createSlice({
 
 export const {
   useSetMessage,
+  useSetErrorMessage,
   useSetIsLoading,
   useSetIsErrorPopupActive,
   useSetIsConfirmPopupActive,

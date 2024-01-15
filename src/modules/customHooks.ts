@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   useSetErrorBtnCb,
@@ -8,6 +8,7 @@ import {
   useSetIsConfirmPopupActive,
   useSetIsLoading,
   useSetMessage,
+  useSetErrorMessage,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
 import {
@@ -59,13 +60,13 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: () => any) => {
-      dispatch(useSetMessage({ message: error.message }));
+      dispatch(useSetErrorMessage({ errorMessage: error.message }));
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
         useSetErrorBtnCb({
           callback: () => {
             dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
-            dispatch(useSetMessage({ message: '' }));
+            dispatch(useSetErrorMessage({ errorMessage: '' }));
             errorPopupBtnCb?.();
           },
         }),
