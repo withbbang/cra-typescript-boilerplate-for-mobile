@@ -88,7 +88,7 @@ export function useSetCatchClauseForErrorPopupHook() {
  */
 export function useGetDataHook({
   url,
-  checkValidatioinCb,
+  beforeCb,
   successCb,
   failCb,
   errorPopupBtnCb,
@@ -102,7 +102,7 @@ export function useGetDataHook({
       if (!url) return;
 
       try {
-        checkValidatioinCb?.();
+        beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb));
         successCb?.();
@@ -117,7 +117,7 @@ export function useGetDataHook({
   const useGetData = useCallback(
     async ({
       url,
-      checkValidatioinCb,
+      beforeCb,
       successCb,
       failCb,
       errorPopupBtnCb,
@@ -125,7 +125,7 @@ export function useGetDataHook({
       if (!url) return;
 
       try {
-        checkValidatioinCb?.();
+        beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         setData(await getAPI(url, failCb));
         successCb?.();
@@ -153,7 +153,7 @@ export function useGetDataHook({
 export function usePostDataHook({
   url,
   params,
-  checkValidatioinCb,
+  beforeCb,
   successCb,
   failCb,
   errorPopupBtnCb,
@@ -166,7 +166,7 @@ export function usePostDataHook({
     if (!url) return;
 
     try {
-      checkValidatioinCb?.();
+      beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
       setData(await postAPI(url, params, failCb));
       successCb?.();
@@ -175,15 +175,7 @@ export function usePostDataHook({
     } finally {
       dispatch(useSetIsLoading({ isLoading: false }));
     }
-  }, [
-    url,
-    params,
-    checkValidatioinCb,
-    successCb,
-    failCb,
-    errorPopupBtnCb,
-    data,
-  ]);
+  }, [url, params, beforeCb, successCb, failCb, errorPopupBtnCb, data]);
 
   return { data, usePostData };
 }
@@ -196,6 +188,7 @@ export function usePostDataByConfirmPopupHook({
   message,
   url,
   params,
+  beforeCb,
   successCb,
   cancelBtnCb,
   failCb,
@@ -212,6 +205,7 @@ export function usePostDataByConfirmPopupHook({
       useSetConfirmBtnCb({
         callback: async () => {
           try {
+            beforeCb?.();
             dispatch(useSetIsLoading({ isLoading: true }));
             setData(await postAPI(url, params, failCb));
             successCb?.();

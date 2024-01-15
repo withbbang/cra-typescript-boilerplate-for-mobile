@@ -45,14 +45,14 @@ export interface TypeThrowCustomErrorInAPI {
  * [Get API 호출 커스텀 훅 파라미터 타입]
  *
  * @type {string | undefined} url: api url
- * @type {Function | undefined} checkValidatioinCb: 요청 전 유효성 검사 콜백
+ * @type {Function | undefined} beforeCb: 요청 전 콜백
  * @type {Function | undefined} successCb: API 성공시 바로 실행하는 콜백
  * @type {Function | undefined} failCb: API 실패시 바로 실행하는 콜백
  * @type {Function | undefined} errorPopupBtnCb: 에러팝업 버튼 콜백
  */
 export interface TypeGetAPIHookParams {
   url?: string;
-  checkValidatioinCb?: () => any;
+  beforeCb?: () => any;
   successCb?: () => any;
   failCb?: () => any;
   errorPopupBtnCb?: () => any;
@@ -63,7 +63,7 @@ export interface TypeGetAPIHookParams {
  *
  * @type {string | undefined} url: api url
  * @type {any} params: body 데이터
- * @type {Function | undefined} checkValidatioinCb: 요청 전 유효성 검사 콜백
+ * @type {Function | undefined} beforeCb: 요청 전 콜백
  * @type {Function | undefined} successCb: API 성공시 바로 실행하는 콜백
  * @type {Function | undefined} failCb: API 실패시 바로 실행하는 콜백
  * @type {Function | undefined} errorPopupBtnCb: 에러팝업 버튼 콜백
@@ -71,7 +71,7 @@ export interface TypeGetAPIHookParams {
 export interface TypePostAPIHookParams {
   url?: string;
   params: any;
-  checkValidatioinCb?: () => any;
+  beforeCb?: () => any;
   successCb?: () => any;
   failCb?: () => any;
   errorPopupBtnCb?: () => any;
@@ -82,6 +82,7 @@ export interface TypePostAPIHookParams {
  *
  * @type {string | undefined} url: api url
  * @type {any} params: body 데이터
+ * @type {Function | undefined} beforeCb: 요청 전 콜백
  * @type {Function | undefined} successCb: API 성공시 바로 실행하는 콜백
  * @type {Function | undefined} cancelBtnCb: 확인 팝업 취소 버튼 콜백
  * @type {Function | undefined} failCb: API 실패시 바로 실행하는 콜백
@@ -91,6 +92,7 @@ export interface TypePostAPIByConfirmPopupHook {
   message: string;
   url: string;
   params: any;
+  beforeCb?: () => any;
   successCb?: () => any;
   cancelBtnCb?: () => any;
   failCb?: () => any;
