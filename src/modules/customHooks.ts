@@ -9,6 +9,8 @@ import {
   useSetIsLoading,
   useSetMessage,
   useSetErrorMessage,
+  useSetConfirmBtnText,
+  useSetCancelBtnText,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
 import {
@@ -64,7 +66,7 @@ export function useSetCatchClauseForErrorPopupHook() {
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
         useSetErrorBtnCb({
-          callback: () => {
+          errorBtnCb: () => {
             dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
             dispatch(useSetErrorMessage({ errorMessage: '' }));
             errorPopupBtnCb?.();
@@ -188,6 +190,8 @@ export function usePostDataByConfirmPopupHook({
   message,
   url,
   params,
+  confirmBtnText,
+  cancelBtnText,
   beforeCb,
   successCb,
   cancelBtnCb,
@@ -201,9 +205,11 @@ export function usePostDataByConfirmPopupHook({
   const useSetActivePostDataByConfirmPopup = useCallback(() => {
     dispatch(useSetMessage({ message }));
     dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
+    dispatch(useSetConfirmBtnText({ confirmBtnText }));
+    dispatch(useSetCancelBtnText({ cancelBtnText }));
     dispatch(
       useSetConfirmBtnCb({
-        callback: async () => {
+        confirmBtnCb: async () => {
           try {
             beforeCb?.();
             dispatch(useSetIsLoading({ isLoading: true }));
@@ -215,6 +221,8 @@ export function usePostDataByConfirmPopupHook({
             dispatch(
               useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
             );
+            dispatch(useSetConfirmBtnText({ confirmBtnText: '' }));
+            dispatch(useSetCancelBtnText({ cancelBtnText: '' }));
             dispatch(useSetIsLoading({ isLoading: false }));
           }
         },
@@ -222,7 +230,7 @@ export function usePostDataByConfirmPopupHook({
     );
     dispatch(
       useSetCancelBtnCb({
-        callback: () => {
+        cancelBtnCb: () => {
           cancelBtnCb?.();
           dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: false }));
           dispatch(useSetMessage({ message: '' }));
@@ -233,6 +241,8 @@ export function usePostDataByConfirmPopupHook({
     message,
     url,
     params,
+    confirmBtnText,
+    cancelBtnText,
     successCb,
     cancelBtnCb,
     failCb,

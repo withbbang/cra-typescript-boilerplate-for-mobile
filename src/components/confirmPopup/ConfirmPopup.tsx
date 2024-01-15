@@ -16,10 +16,12 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 }
 
 function ConfirmPopup({
-  isConfirmPopupActive,
   message,
-  useConfirmBtnCb,
-  useCancelBtnCb,
+  isConfirmPopupActive,
+  confirmBtnText,
+  cancelBtnText,
+  confirmBtnCb,
+  cancelBtnCb,
 }: CommonState): React.JSX.Element {
   return (
     <div
@@ -33,8 +35,8 @@ function ConfirmPopup({
       <div className={styles.modalBody}>
         <span>{message}</span>
         <div>
-          <button onClick={useCancelBtnCb}>취소</button>
-          <button onClick={useConfirmBtnCb}>확인</button>
+          <button onClick={cancelBtnCb}>{cancelBtnText || '취소'}</button>
+          <button onClick={confirmBtnCb}>{confirmBtnText || '확인'}</button>
         </div>
       </div>
     </div>

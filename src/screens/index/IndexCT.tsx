@@ -9,9 +9,9 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     message: 'hello',
     url: '/wlekfj',
     params: {},
-    beforeCb: () => {
-      throw Error('Test Error');
-    },
+    confirmBtnText: 'There',
+    cancelBtnText: 'Hello',
+    beforeCb: () => console.warn('called beforeCb'),
     successCb: () => console.warn('called successCb'),
     cancelBtnCb: () => console.warn('called cancelBtnCb'),
     failCb: () => console.warn('called failCb'),

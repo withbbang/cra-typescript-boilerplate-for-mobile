@@ -9,9 +9,9 @@ export interface CommonState {
   cancelBtnText?: string; // 확인 팝업의 취소 버튼 텍스트
   isErrorPopupActive?: boolean; // 에러 팝업 활성 여부
   errorBtnText?: string; // 에러 팝업의 버튼 텍스트
-  useConfirmBtnCb?: () => any; // 확인 팝업의 확인 버튼 콜백
-  useCancelBtnCb?: () => any; // 확인 팝업의 취소 버튼 콜백
-  useErrorBtnCb?: () => any; // 에러 팝업의 버튼 콜백
+  confirmBtnCb?: () => any; // 확인 팝업의 확인 버튼 콜백
+  cancelBtnCb?: () => any; // 확인 팝업의 취소 버튼 콜백
+  errorBtnCb?: () => any; // 에러 팝업의 버튼 콜백
 }
 
 export const initialState: CommonState = {
@@ -23,9 +23,9 @@ export const initialState: CommonState = {
   cancelBtnText: '',
   isErrorPopupActive: false,
   errorBtnText: '',
-  useConfirmBtnCb: () => {},
-  useCancelBtnCb: () => {},
-  useErrorBtnCb: () => {},
+  confirmBtnCb: () => {},
+  cancelBtnCb: () => {},
+  errorBtnCb: () => {},
 };
 
 const commonSlice = createSlice({
@@ -54,27 +54,27 @@ const commonSlice = createSlice({
     },
     // 확인 팝업의 취소 버튼 텍스트 설정
     useSetConfirmBtnCb(state: CommonState, action) {
-      state.useConfirmBtnCb = action.payload.callback;
+      state.confirmBtnCb = action.payload.confirmBtnCb;
     },
     // 에러 팝업 활성 여부 설정
     useSetCancelBtnCb(state: CommonState, action) {
-      state.useCancelBtnCb = action.payload.callback;
+      state.cancelBtnCb = action.payload.cancelBtnCb;
     },
     // 에러 팝업의 버튼 텍스트 설정
     useSetConfirmBtnText(state: CommonState, action) {
-      state.confirmBtnText = action.payload.text;
+      state.confirmBtnText = action.payload.confirmBtnText;
     },
     // 확인 팝업의 확인 버튼 콜백 설정
     useSetCancelBtnText(state: CommonState, action) {
-      state.cancelBtnText = action.payload.text;
+      state.cancelBtnText = action.payload.cancelBtnText;
     },
     // 확인 팝업의 취소 버튼 콜백 설정
     useSetErrorBtnCb(state: CommonState, action) {
-      state.useErrorBtnCb = action.payload.callback;
+      state.errorBtnCb = action.payload.errorBtnCb;
     },
     // 에러 팝업의 버튼 콜백 설정
     useSetErrorBtnText(state: CommonState, action) {
-      state.errorBtnText = action.payload.text;
+      state.errorBtnText = action.payload.errorBtnText;
     },
   },
   // API 리듀서들 비동기 상태값들 한번에 관리하기 위한 extraReducers 모음
