@@ -8,7 +8,6 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
   const { useSetActivePostDataByConfirmPopup } = usePostDataByConfirmPopupHook({
     message: 'hello',
     url: '/wlekfj',
-    params: {},
     confirmBtnText: 'There',
     cancelBtnText: 'Hello',
     beforeCb: () => console.warn('called beforeCb'),

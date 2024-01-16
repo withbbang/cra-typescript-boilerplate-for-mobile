@@ -23,9 +23,9 @@ export const initialState: CommonState = {
   cancelBtnText: '',
   isErrorPopupActive: false,
   errorBtnText: '',
-  confirmBtnCb: () => {},
-  cancelBtnCb: () => {},
-  errorBtnCb: () => {},
+  confirmBtnCb: undefined,
+  cancelBtnCb: undefined,
+  errorBtnCb: undefined,
 };
 
 const commonSlice = createSlice({
