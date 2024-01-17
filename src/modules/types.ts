@@ -62,7 +62,6 @@ export interface TypeGetAPIHookParams {
  * [Post API 호출 커스텀 훅 파라미터 타입]
  *
  * @type {string} url: api url
- * @type {any | undefined} params: body 데이터
  * @type {string | undefined} url: api url
  * @type {Function | undefined} beforeCb: 요청 전 콜백
  * @type {Function | undefined} successCb: API 성공시 바로 실행하는 콜백
@@ -71,7 +70,6 @@ export interface TypeGetAPIHookParams {
  */
 export interface TypePostAPIHookParams {
   url: string;
-  params?: any;
   beforeCb?: () => any;
   successCb?: () => any;
   failCb?: () => any;
@@ -83,7 +81,6 @@ export interface TypePostAPIHookParams {
  *
  * @type {string} message: 팝업 메세지
  * @type {string} url: api url
- * @type {any | undefined} params: body 데이터
  * @type {string | undefined} confirmBtnText: 확인 버튼 텍스트
  * @type {string | undefined} cancelBtnText: 취소 버튼 텍스트
  * @type {Function | undefined} beforeCb: 요청 전 콜백
@@ -95,7 +92,6 @@ export interface TypePostAPIHookParams {
 export interface TypePostAPIByConfirmPopupHook {
   message: string;
   url: string;
-  params?: any;
   confirmBtnText?: string;
   cancelBtnText?: string;
   beforeCb?: () => any;

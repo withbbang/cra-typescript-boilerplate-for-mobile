@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { CustomWindow } from 'modules/types';
-import { usePostDataByConfirmPopupHook } from 'modules/customHooks';
+import {
+  usePostDataByConfirmPopupHook,
+  usePostDataHook,
+} from 'modules/customHooks';
+import { handleParseDataFromJSInterface } from 'modules/utils';
 import IndexPT from './IndexPT';
 
 function IndexCT({}: IndexCTProps): React.JSX.Element {
@@ -17,8 +21,22 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     errorPopupBtnCb: () => console.warn('called errorPopupBtnCb'),
   });
 
+  const { usePostData } = usePostDataHook({
+    url: '/welkjtl',
+  });
+
+  const test = (): Promise<unknown> =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('b');
+      }, 500);
+    });
+
   const onClick = () => {
-    useSetActivePostDataByConfirmPopup();
+    useSetActivePostDataByConfirmPopup({
+      a: 'a',
+      b: test(),
+    });
   };
 
   const handleGoBack = (data?: any) => {
@@ -33,6 +51,11 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     const customWindow = window as CustomWindow;
     customWindow.goBack = handleGoBack;
     customWindow.onResult = handleOnResult;
+
+    usePostData({
+      c: 'c',
+      d: handleParseDataFromJSInterface({ bridge: '', action: '' }),
+    });
 
     return () => {
       delete customWindow.goBack;

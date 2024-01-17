@@ -1,6 +1,7 @@
 import {
   CustomWindow,
   TypeJavascriptInterface,
+  TypeKeyValueForm,
   TypeThrowCustomErrorInAPI,
   TypeThrowErrorInAPI,
 } from './types';
@@ -107,7 +108,9 @@ export function handleJavascriptInterfaceForAOS({
         if (data) resolve(window[interfaceNm][action](data));
         else resolve(window[interfaceNm][action]());
       } else {
-        throw Error(`앱 통신(${interfaceNm} ${action}) 에러`);
+        throw Error(
+          `Native에서 [${interfaceNm} ${action}]와 관련된 데이터를 가져올 수 없습니다.`,
+        );
       }
     } catch (error: any) {
       console.error(error);
@@ -150,7 +153,10 @@ export function handleJavascriptInterfaceForIOS({
               data,
             }),
           );
-      else throw Error(`앱 통신(${bridge}) 에러`);
+      else
+        throw Error(
+          `Native에서 [${bridge}]와 관련된 데이터를 가져올 수 없습니다.`,
+        );
     } catch (error) {
       console.error(error);
       reject(error);
@@ -203,4 +209,38 @@ export async function handleParseDataFromJSInterface({
   } catch (error) {
     return value;
   }
+}
+
+/**
+ * Promise가 포함된 API 파라미터 객체, 동기적으로 resolve 시키기 위한 함수
+ * @param {any} params API 파라미터 객체
+ * @returns {Promise<TypeKeyValueForm>} resolve된 파라미터 객체
+ */
+export async function handleSetParamsWithSync(
+  params: any,
+): Promise<TypeKeyValueForm> {
+  const newParams: TypeKeyValueForm = {};
+  const keyArray: string[] = [];
+  const promiseValueArray: any[] = [];
+
+  Object.entries(params).forEach(([key, value]) => {
+    keyArray.push(key);
+    promiseValueArray.push(
+      new Promise<string | number>((resolve, reject) => {
+        try {
+          resolve(value as string | number);
+        } catch (error: any) {
+          reject(error);
+        }
+      }),
+    );
+  });
+
+  const valueArray: (string | number)[] = await Promise.all(promiseValueArray);
+
+  keyArray.forEach((key, idx) => {
+    newParams[key] = valueArray[idx];
+  });
+
+  return newParams;
 }
