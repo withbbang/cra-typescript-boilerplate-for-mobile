@@ -57,7 +57,6 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
       d: handleParseDataFromJSInterface({
         bridge: '',
         action: '',
-        requiredPopup: true,
       }),
     });
 

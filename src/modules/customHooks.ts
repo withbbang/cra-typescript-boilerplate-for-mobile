@@ -286,7 +286,7 @@ export function useJavascriptInterfaceHook() {
       action,
       data,
       hasCb,
-      requiredPopup,
+      isActiveErrorPopup,
     }: TypeJavascriptInterface) => {
       try {
         return await handleParseDataFromJSInterface({
@@ -294,7 +294,7 @@ export function useJavascriptInterfaceHook() {
           action,
           data,
           hasCb,
-          requiredPopup,
+          isActiveErrorPopup,
         });
       } catch (error: any) {
         return useSetCatchClauseForErrorPopup(error);

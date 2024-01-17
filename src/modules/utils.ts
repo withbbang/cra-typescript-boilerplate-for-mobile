@@ -93,14 +93,14 @@ export function handleGetOsType(): string {
 /**
  * [AOS용 Javascript Interface 호출 함수]
  *
- * @param {TypeJavascriptInterface} params bridge, action, data, hasCb, requiredPopup 들고 있는 객체
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb, isActiveErrorPopup 들고 있는 객체
  * @returns {Promise<any>}
  */
 export function handleJavascriptInterfaceForAOS({
   bridge,
   action,
   data,
-  requiredPopup,
+  isActiveErrorPopup,
 }: TypeJavascriptInterface): Promise<any> {
   return new Promise((resolve, reject) => {
     const interfaceNm = bridge as keyof Window;
@@ -110,7 +110,7 @@ export function handleJavascriptInterfaceForAOS({
         if (data) resolve(window[interfaceNm][action](data));
         else resolve(window[interfaceNm][action]());
       } else {
-        if (requiredPopup) throw new NativeError();
+        if (!isActiveErrorPopup) throw new NativeError();
 
         throw Error(
           `Native에서 [${interfaceNm} ${action}]와 관련된 데이터를 가져올 수 없습니다.`,
@@ -134,7 +134,7 @@ export function handleJavascriptInterfaceForIOS({
   action,
   data,
   hasCb,
-  requiredPopup,
+  isActiveErrorPopup,
 }: TypeJavascriptInterface): Promise<any> {
   return new Promise((resolve, reject) => {
     const { webkit } = window as CustomWindow;
@@ -159,7 +159,7 @@ export function handleJavascriptInterfaceForIOS({
             }),
           );
       else {
-        if (requiredPopup) throw new NativeError();
+        if (!isActiveErrorPopup) throw new NativeError();
 
         throw Error(
           `Native에서 [${bridge}]와 관련된 데이터를 가져올 수 없습니다.`,
@@ -183,14 +183,14 @@ export async function handleJavascriptInterface({
   action,
   data,
   hasCb,
-  requiredPopup,
+  isActiveErrorPopup,
 }: TypeJavascriptInterface): Promise<any> {
   if (handleGetOsType() === 'AND')
     return handleJavascriptInterfaceForAOS({
       bridge,
       action,
       data,
-      requiredPopup,
+      isActiveErrorPopup,
     });
 
   if (handleGetOsType() === 'IOS')
@@ -199,7 +199,7 @@ export async function handleJavascriptInterface({
       action,
       data,
       hasCb,
-      requiredPopup,
+      isActiveErrorPopup,
     });
 
   return '';
@@ -216,14 +216,14 @@ export async function handleParseDataFromJSInterface({
   action,
   data,
   hasCb,
-  requiredPopup,
+  isActiveErrorPopup,
 }: TypeJavascriptInterface): Promise<any> {
   const value = await handleJavascriptInterface({
     bridge,
     action,
     data,
     hasCb,
-    requiredPopup,
+    isActiveErrorPopup,
   });
 
   try {
