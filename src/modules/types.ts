@@ -110,12 +110,14 @@ export interface TypePostAPIByConfirmPopupHook {
  * @type {string} bridge: 브릿지 이름
  * @type {any | undefined} data: Native에 전달할 데이터
  * @type {boolean | undefined} hasCb: js interface 요청 후 콜백 있는지 여부
+ * @type {boolean | undefined} requiredPopup: JS Interface로 인한 에러 팝업 노출 여부
  */
 export interface TypeJavascriptInterface {
   action: string;
   bridge: string;
   data?: any;
   hasCb?: boolean;
+  requiredPopup?: boolean;
 }
 
 export interface SVGProps {

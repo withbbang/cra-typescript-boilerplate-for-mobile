@@ -60,3 +60,12 @@ export class ServiceUnavailableError extends APIError {
 export class CustomAPIError extends APIError {
   name = 'Custom API Error';
 }
+
+// JS Interface로 인한 커스텀 에러
+export class NativeError extends Error {
+  constructor(message: string = 'Unkown JS Interface') {
+    super(message);
+  }
+
+  name: string = 'Native Error';
+}

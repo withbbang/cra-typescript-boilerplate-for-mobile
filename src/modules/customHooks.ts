@@ -24,6 +24,7 @@ import {
   handleParseDataFromJSInterface,
   handleSetParamsWithSync,
 } from './utils';
+import { NativeError } from './customErrorClasses';
 
 /**
  * [input, textarea, select tag 커스텀 훅]
@@ -65,6 +66,8 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: () => any) => {
+      if (error instanceof NativeError) throw new NativeError();
+
       dispatch(useSetErrorMessage({ errorMessage: error.message }));
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
@@ -278,13 +281,20 @@ export function useJavascriptInterfaceHook() {
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
 
   const useJavascriptInterface = useCallback(
-    async ({ bridge, action, data, hasCb }: TypeJavascriptInterface) => {
+    async ({
+      bridge,
+      action,
+      data,
+      hasCb,
+      requiredPopup,
+    }: TypeJavascriptInterface) => {
       try {
         return await handleParseDataFromJSInterface({
           bridge,
           action,
           data,
           hasCb,
+          requiredPopup,
         });
       } catch (error: any) {
         return useSetCatchClauseForErrorPopup(error);

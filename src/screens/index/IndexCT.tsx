@@ -54,7 +54,11 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
 
     usePostData({
       c: 'c',
-      d: handleParseDataFromJSInterface({ bridge: '', action: '' }),
+      d: handleParseDataFromJSInterface({
+        bridge: '',
+        action: '',
+        requiredPopup: true,
+      }),
     });
 
     return () => {

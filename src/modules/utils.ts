@@ -12,6 +12,7 @@ import {
   ForbiddenError,
   InternalServerErrorError,
   MethodNotAllowedError,
+  NativeError,
   NotFoundError,
   RequestTimeoutError,
   ServiceUnavailableError,
@@ -92,13 +93,14 @@ export function handleGetOsType(): string {
 /**
  * [AOS용 Javascript Interface 호출 함수]
  *
- * @param {TypeJavascriptInterface} params bridge, action, data, hasCb 들고 있는 객체
+ * @param {TypeJavascriptInterface} params bridge, action, data, hasCb, requiredPopup 들고 있는 객체
  * @returns {Promise<any>}
  */
 export function handleJavascriptInterfaceForAOS({
   bridge,
   action,
   data,
+  requiredPopup,
 }: TypeJavascriptInterface): Promise<any> {
   return new Promise((resolve, reject) => {
     const interfaceNm = bridge as keyof Window;
@@ -108,6 +110,8 @@ export function handleJavascriptInterfaceForAOS({
         if (data) resolve(window[interfaceNm][action](data));
         else resolve(window[interfaceNm][action]());
       } else {
+        if (requiredPopup) throw new NativeError();
+
         throw Error(
           `Native에서 [${interfaceNm} ${action}]와 관련된 데이터를 가져올 수 없습니다.`,
         );
@@ -130,6 +134,7 @@ export function handleJavascriptInterfaceForIOS({
   action,
   data,
   hasCb,
+  requiredPopup,
 }: TypeJavascriptInterface): Promise<any> {
   return new Promise((resolve, reject) => {
     const { webkit } = window as CustomWindow;
@@ -153,10 +158,13 @@ export function handleJavascriptInterfaceForIOS({
               data,
             }),
           );
-      else
+      else {
+        if (requiredPopup) throw new NativeError();
+
         throw Error(
           `Native에서 [${bridge}]와 관련된 데이터를 가져올 수 없습니다.`,
         );
+      }
     } catch (error) {
       console.error(error);
       reject(error);
@@ -175,12 +183,24 @@ export async function handleJavascriptInterface({
   action,
   data,
   hasCb,
+  requiredPopup,
 }: TypeJavascriptInterface): Promise<any> {
   if (handleGetOsType() === 'AND')
-    return handleJavascriptInterfaceForAOS({ bridge, action, data });
+    return handleJavascriptInterfaceForAOS({
+      bridge,
+      action,
+      data,
+      requiredPopup,
+    });
 
   if (handleGetOsType() === 'IOS')
-    return handleJavascriptInterfaceForIOS({ bridge, action, data, hasCb });
+    return handleJavascriptInterfaceForIOS({
+      bridge,
+      action,
+      data,
+      hasCb,
+      requiredPopup,
+    });
 
   return '';
 }
@@ -196,12 +216,14 @@ export async function handleParseDataFromJSInterface({
   action,
   data,
   hasCb,
+  requiredPopup,
 }: TypeJavascriptInterface): Promise<any> {
   const value = await handleJavascriptInterface({
     bridge,
     action,
     data,
     hasCb,
+    requiredPopup,
   });
 
   try {
