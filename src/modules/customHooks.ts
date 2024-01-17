@@ -165,10 +165,13 @@ export function usePostDataHook({
       try {
         beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        setData(
-          await postAPI(url, await handleSetParamsWithSync(params), failCb),
+        const response = await postAPI(
+          url,
+          await handleSetParamsWithSync(params),
+          failCb,
         );
-        successCb?.();
+        setData(response);
+        successCb?.(response);
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -213,14 +216,13 @@ export function usePostDataByConfirmPopupHook({
             try {
               beforeCb?.();
               dispatch(useSetIsLoading({ isLoading: true }));
-              setData(
-                await postAPI(
-                  url,
-                  await handleSetParamsWithSync(params),
-                  failCb,
-                ),
+              const response = await postAPI(
+                url,
+                await handleSetParamsWithSync(params),
+                failCb,
               );
-              successCb?.();
+              setData(response);
+              successCb?.(response);
               dispatch(
                 useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
               );
