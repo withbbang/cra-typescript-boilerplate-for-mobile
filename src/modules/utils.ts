@@ -33,23 +33,23 @@ export function handleThrowErrorInAPI({
   failCb?.();
   switch (status) {
     case 400:
-      throw new BadRequestError(message || 'Bad Request Error');
+      throw new BadRequestError(message);
     case 401:
-      throw new UnauthorizedError(message || 'Unauthorized Error');
+      throw new UnauthorizedError(message);
     case 403:
-      throw new ForbiddenError(message || 'Forbidden Error');
+      throw new ForbiddenError(message);
     case 404:
-      throw new NotFoundError(message || 'Not Found Error');
+      throw new NotFoundError(message);
     case 405:
-      throw new MethodNotAllowedError(message || 'Method Not Allowed Error');
+      throw new MethodNotAllowedError(message);
     case 408:
-      throw new RequestTimeoutError(message || 'Request Timeout Error');
+      throw new RequestTimeoutError(message);
     case 500:
-      throw new InternalServerErrorError(message || 'Internal Server Error');
+      throw new InternalServerErrorError(message);
     case 502:
-      throw new BadGatewayError(message || 'Bad Gateway Error');
+      throw new BadGatewayError(message);
     case 503:
-      throw new ServiceUnavailableError(message || 'Service Unavailable Error');
+      throw new ServiceUnavailableError(message);
     default:
       break;
   }
