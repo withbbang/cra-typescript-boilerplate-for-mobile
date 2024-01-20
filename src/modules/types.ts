@@ -55,7 +55,7 @@ export interface TypeGetAPIHookParams {
   beforeCb?: () => any;
   successCb?: (response?: any) => any;
   failCb?: () => any;
-  errorPopupBtnCb?: () => any;
+  errorPopupBtnCb?: (code?: string) => any;
 }
 
 /**
@@ -73,7 +73,7 @@ export interface TypePostAPIHookParams {
   beforeCb?: () => any;
   successCb?: (response?: any) => any;
   failCb?: () => any;
-  errorPopupBtnCb?: () => any;
+  errorPopupBtnCb?: (code?: string) => any;
 }
 
 /**
@@ -98,7 +98,7 @@ export interface TypePostAPIByConfirmPopupHook {
   successCb?: (response?: any) => any;
   cancelBtnCb?: () => any;
   failCb?: () => any;
-  errorPopupBtnCb?: () => any;
+  errorPopupBtnCb?: (code?: string) => any;
 }
 
 /**

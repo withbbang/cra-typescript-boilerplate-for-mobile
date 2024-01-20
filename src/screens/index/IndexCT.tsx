@@ -18,7 +18,7 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     successCb: () => console.warn('called successCb'),
     cancelBtnCb: () => console.warn('called cancelBtnCb'),
     failCb: () => console.warn('called failCb'),
-    errorPopupBtnCb: () => console.warn('called errorPopupBtnCb'),
+    errorPopupBtnCb: (code?: string) => console.warn('called errorPopupBtnCb'),
   });
 
   const { usePostData } = usePostDataHook({

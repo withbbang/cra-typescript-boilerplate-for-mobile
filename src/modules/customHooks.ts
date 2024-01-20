@@ -65,7 +65,7 @@ export function useSetCatchClauseForErrorPopupHook() {
   const dispatch = useDispatch();
 
   const useSetCatchClauseForErrorPopup = useCallback(
-    (error: any, errorPopupBtnCb?: () => any) => {
+    (error: any, errorPopupBtnCb?: (code?: string) => any) => {
       if (error instanceof NativeError) throw new NativeError();
 
       dispatch(useSetErrorMessage({ errorMessage: error.message }));
@@ -76,7 +76,7 @@ export function useSetCatchClauseForErrorPopupHook() {
             dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
             dispatch(useSetErrorMessage({ errorMessage: '' }));
             dispatch(useSetErrorBtnCb({}));
-            errorPopupBtnCb?.();
+            errorPopupBtnCb?.(error.code);
           },
         }),
       );
