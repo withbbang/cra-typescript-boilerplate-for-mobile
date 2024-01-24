@@ -27,6 +27,7 @@
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "env-cmd": "^10.1.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
@@ -72,8 +73,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "REACT_APP_MODE=production node scripts/build.js",
-    "build:dev": "REACT_APP_MODE=development node scripts/build.js",
+    "build": "env-cmd -f .env.production node scripts/build.js",
+    "build:development": "env-cmd -f .env.development node scripts/build.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
