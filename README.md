@@ -1,8 +1,8 @@
-# Create React App with Typescript Boilerplate for Mobile
+# Create React App with Typescript Boilerplate
 
 ### 프로젝트 목적
 
-1. CRA Typescript for Mobile Webview 최소 세팅을 위함
+1. CRA With Typescript 최소 세팅 (Feat. Mobile WebView)
 
 ---
 
