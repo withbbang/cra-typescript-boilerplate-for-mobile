@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
 function ErrorPopup({
   isErrorPopupActive,
   errorMessage,
-  errorBtnCb,
+  useErrorBtnCb,
 }: CommonState): React.JSX.Element {
   return (
     <div
@@ -30,9 +30,9 @@ function ErrorPopup({
       }
     >
       <div className={styles.modalBody}>
-        <span>{errorMessage}</span>
+        <span dangerouslySetInnerHTML={{ __html: errorMessage || '' }} />
         <div>
-          <button onClick={errorBtnCb}>OK</button>
+          <button onClick={useErrorBtnCb}>OK</button>
         </div>
       </div>
     </div>

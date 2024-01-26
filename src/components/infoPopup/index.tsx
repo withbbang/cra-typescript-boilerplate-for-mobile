@@ -3,7 +3,7 @@ import { PropState } from 'middlewares/configureReducer';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
-import styles from './ConfirmPopup.module.scss';
+import styles from './InfoPopup.module.scss';
 
 function mapStateToProps(state: PropState): CommonState {
   return {
@@ -15,32 +15,29 @@ function mapDispatchToProps(dispatch: (actionFunction: Action<any>) => any) {
   return {};
 }
 
-function ConfirmPopup({
-  message,
-  isConfirmPopupActive,
-  confirmBtnText,
-  cancelBtnText,
-  useConfirmBtnCb,
-  useCancelBtnCb,
+function InfoPopup({
+  isInfoPopupActive,
+  infoMessage,
+  infoBtnText,
+  useInfoBtnCb,
 }: CommonState): React.JSX.Element {
   return (
     <div
       className={styles.background}
       style={
-        isConfirmPopupActive !== undefined && isConfirmPopupActive
+        isInfoPopupActive !== undefined && isInfoPopupActive
           ? { display: '' }
           : { display: 'none' }
       }
     >
       <div className={styles.modalBody}>
-        <span dangerouslySetInnerHTML={{ __html: message || '' }} />
+        <span dangerouslySetInnerHTML={{ __html: infoMessage || '' }} />
         <div>
-          <button onClick={useConfirmBtnCb}>{cancelBtnText || '취소'}</button>
-          <button onClick={useCancelBtnCb}>{confirmBtnText || '확인'}</button>
+          <button onClick={useInfoBtnCb}>{infoBtnText || '확인'}</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoPopup);

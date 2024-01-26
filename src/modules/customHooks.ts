@@ -11,6 +11,10 @@ import {
   useSetErrorMessage,
   useSetConfirmBtnText,
   useSetCancelBtnText,
+  useSetInfoMessage,
+  useSetIsInfoPopupActive,
+  useSetInfoBtnCb,
+  useSetInfoBtnText,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
 import {
@@ -72,7 +76,7 @@ export function useSetCatchClauseForErrorPopupHook() {
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
       dispatch(
         useSetErrorBtnCb({
-          errorBtnCb: () => {
+          useErrorBtnCb: () => {
             dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
             dispatch(useSetErrorMessage({ errorMessage: '' }));
             dispatch(useSetErrorBtnCb({}));
@@ -85,6 +89,36 @@ export function useSetCatchClauseForErrorPopupHook() {
   );
 
   return useSetCatchClauseForErrorPopup;
+}
+
+/**
+ * [Info 팝업 훅]
+ *
+ * @returns
+ */
+export function useSetInfoPopupHook() {
+  const dispatch = useDispatch();
+
+  const useSetInfoPopup = useCallback(
+    (message: string, infoPopupBtnCb?: () => any) => {
+      dispatch(useSetInfoMessage({ infoMessage: message }));
+      dispatch(useSetIsInfoPopupActive({ isInfoPopupActive: true }));
+      dispatch(
+        useSetInfoBtnCb({
+          useInfoBtnCb: () => {
+            dispatch(useSetIsInfoPopupActive({ isInfoPopupActive: false }));
+            dispatch(useSetInfoMessage({ infoMessage: '' }));
+            dispatch(useSetInfoBtnText({ infoBtnText: '' }));
+            dispatch(useSetInfoBtnCb({}));
+            infoPopupBtnCb?.();
+          },
+        }),
+      );
+    },
+    [],
+  );
+
+  return useSetInfoPopup;
 }
 
 /**
@@ -215,7 +249,7 @@ export function usePostDataByConfirmPopupHook({
 
       dispatch(
         useSetConfirmBtnCb({
-          confirmBtnCb: async () => {
+          useConfirmBtnCb: async () => {
             try {
               beforeCb?.();
               dispatch(useSetIsLoading({ isLoading: true }));
@@ -244,7 +278,7 @@ export function usePostDataByConfirmPopupHook({
 
       dispatch(
         useSetCancelBtnCb({
-          cancelBtnCb: () => {
+          useCancelBtnCb: () => {
             cancelBtnCb?.();
             dispatch(
               useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
