@@ -11,6 +11,7 @@ import {
  * @returns {Promise<any>}
  */
 function getAPI(url: string, failCb?: () => any): Promise<any> {
+  console.debug('URL: ', url);
   return new Promise((resolve, reject) => {
     fetch(url, {
       method: 'GET',
