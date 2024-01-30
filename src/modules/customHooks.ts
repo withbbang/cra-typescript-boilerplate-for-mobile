@@ -28,7 +28,12 @@ import {
   handleParseDataFromJSInterface,
   handleSetParamsWithSync,
 } from './utils';
-import { NativeError } from './customErrorClasses';
+import {
+  AfterErrorPopupThenStopLogic,
+  BeforeErrorPopupThenNonStopLogic,
+  BeforeErrorPopupThenStopLogic,
+  NativeError,
+} from './customErrorClasses';
 
 /**
  * [input, textarea, select tag 커스텀 훅]
@@ -70,7 +75,10 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: (code?: string) => any) => {
-      if (error instanceof NativeError) throw new NativeError();
+      if (error instanceof BeforeErrorPopupThenStopLogic)
+        throw new BeforeErrorPopupThenStopLogic(error.message);
+
+      if (error instanceof BeforeErrorPopupThenNonStopLogic) return;
 
       dispatch(useSetErrorMessage({ errorMessage: error.message }));
       dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: true }));
@@ -84,6 +92,9 @@ export function useSetCatchClauseForErrorPopupHook() {
           },
         }),
       );
+
+      if (error instanceof AfterErrorPopupThenStopLogic)
+        throw new AfterErrorPopupThenStopLogic(error.message);
     },
     [],
   );
