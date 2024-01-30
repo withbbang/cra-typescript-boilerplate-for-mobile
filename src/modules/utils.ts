@@ -107,7 +107,7 @@ export function handleJavascriptInterfaceForAOS({
 
     try {
       if (window[interfaceNm] && window[interfaceNm][action]) {
-        if (data) resolve(window[interfaceNm][action](data));
+        if (data !== undefined) resolve(window[interfaceNm][action](data));
         else resolve(window[interfaceNm][action]());
       } else {
         if (!isActiveErrorPopup) throw new NativeError();
