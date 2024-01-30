@@ -109,3 +109,35 @@ export class NativeError extends Error {
 
   name: string = 'Native Error';
 }
+
+export class BeforeErrorPopupThenStopLogic extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+
+  name: string = 'Error Occurred Before Popup And Then Stop Logic';
+}
+
+export class BeforeErrorPopupThenNonStopLogic extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+
+  name: string = 'Error Occurred Before Popup And Then No Stop Logic';
+}
+
+export class AfterErrorPopupThenStopLogic extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+
+  name: string = 'Error Occurred After Popup And Then Stop Logic';
+}
+
+export class AfterErrorPopupThenNonStopLogic extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+
+  name: string = 'Error Occurred After Popup And Then No Stop Logic';
+}
