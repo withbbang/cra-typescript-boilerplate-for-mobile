@@ -38,7 +38,7 @@ export interface TypeThrowErrorInAPI {
 export interface TypeThrowCustomErrorInAPI {
   code: string;
   message: string;
-  failCb?: () => any;
+  failCb?: (code?: string) => any;
 }
 
 /**
@@ -54,7 +54,7 @@ export interface TypeGetAPIHookParams {
   url: string;
   beforeCb?: () => any;
   successCb?: (response?: any) => any;
-  failCb?: () => any;
+  failCb?: (code?: string) => any;
   errorPopupBtnCb?: (code?: string) => any;
 }
 
@@ -72,7 +72,7 @@ export interface TypePostAPIHookParams {
   url: string;
   beforeCb?: () => any;
   successCb?: (response?: any) => any;
-  failCb?: () => any;
+  failCb?: (code?: string) => any;
   errorPopupBtnCb?: (code?: string) => any;
 }
 
@@ -97,7 +97,7 @@ export interface TypePostAPIByConfirmPopupHook {
   beforeCb?: () => any;
   successCb?: (response?: any) => any;
   cancelBtnCb?: () => any;
-  failCb?: () => any;
+  failCb?: (code?: string) => any;
   errorPopupBtnCb?: (code?: string) => any;
 }
 

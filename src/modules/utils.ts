@@ -66,7 +66,7 @@ export function handleThrowCustomErrorInAPI({
   message,
   failCb,
 }: TypeThrowCustomErrorInAPI) {
-  failCb?.();
+  failCb?.(code);
   // TODO: 코드에 따라 switch case 분기 필요
   throw new CustomAPIError(message);
 }
