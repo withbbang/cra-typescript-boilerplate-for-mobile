@@ -75,6 +75,8 @@ export function useSetCatchClauseForErrorPopupHook() {
 
   const useSetCatchClauseForErrorPopup = useCallback(
     (error: any, errorPopupBtnCb?: (code?: string) => any) => {
+      console.error(error);
+
       if (error instanceof BeforeErrorPopupThenStopLogic)
         throw new BeforeErrorPopupThenStopLogic(error.message);
 

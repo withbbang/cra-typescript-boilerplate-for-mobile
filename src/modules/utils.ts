@@ -117,7 +117,6 @@ export function handleJavascriptInterfaceForAOS({
         );
       }
     } catch (error: any) {
-      console.error(error);
       reject(error);
     }
   });
@@ -166,7 +165,6 @@ export function handleJavascriptInterfaceForIOS({
         );
       }
     } catch (error) {
-      console.error(error);
       reject(error);
     }
   });
