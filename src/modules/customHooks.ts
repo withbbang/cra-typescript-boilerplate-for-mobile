@@ -160,8 +160,9 @@ export function useGetDataHook({
       try {
         beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        setData(await getAPI(url, failCb));
-        successCb?.();
+        const response = await getAPI(url, failCb);
+        setData(response);
+        successCb?.(response);
       } catch (error: any) {
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
@@ -176,7 +177,9 @@ export function useGetDataHook({
     try {
       beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      setData(await getAPI(url, failCb));
+      const response = await getAPI(url, failCb);
+      setData(response);
+      successCb?.(response);
       successCb?.();
     } catch (error: any) {
       useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
