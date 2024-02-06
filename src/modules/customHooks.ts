@@ -21,6 +21,7 @@ import {
   TypeGetAPIHookParams,
   TypeJavascriptInterface,
   TypeKeyValueForm,
+  TypeNormalConfirmPopupHook,
   TypePostAPIByConfirmPopupHook,
   TypePostAPIHookParams,
 } from './types';
@@ -322,6 +323,58 @@ export function usePostDataByConfirmPopupHook({
   );
 
   return { data, useSetActivePostDataByConfirmPopup };
+}
+
+/**
+ * [일반 확인 팝업 커스텀 훅]
+ *
+ * @returns
+ */
+export function useNormalConfirmPopupHook({
+  message,
+  confirmBtnText,
+  cancelBtnText,
+  confirmCb,
+  cancelBtnCb,
+}: TypeNormalConfirmPopupHook) {
+  const dispatch = useDispatch();
+
+  const useNormalConfirmPopup = useCallback(() => {
+    dispatch(useSetMessage({ message }));
+    dispatch(useSetConfirmBtnText({ confirmBtnText }));
+    dispatch(useSetCancelBtnText({ cancelBtnText }));
+    dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: true }));
+
+    dispatch(
+      useSetConfirmBtnCb({
+        useConfirmBtnCb: () => {
+          confirmCb?.();
+          dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: false }));
+          dispatch(useSetMessage({ message: '' }));
+          dispatch(useSetConfirmBtnText({ confirmBtnText: '' }));
+          dispatch(useSetCancelBtnText({ cancelBtnText: '' }));
+          dispatch(useSetConfirmBtnCb({}));
+          dispatch(useSetCancelBtnCb({}));
+        },
+      }),
+    );
+
+    dispatch(
+      useSetCancelBtnCb({
+        useCancelBtnCb: () => {
+          cancelBtnCb?.();
+          dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: false }));
+          dispatch(useSetMessage({ message: '' }));
+          dispatch(useSetConfirmBtnText({ confirmBtnText: '' }));
+          dispatch(useSetCancelBtnText({ cancelBtnText: '' }));
+          dispatch(useSetConfirmBtnCb({}));
+          dispatch(useSetCancelBtnCb({}));
+        },
+      }),
+    );
+  }, [message, confirmBtnText, cancelBtnText, confirmCb, cancelBtnCb]);
+
+  return useNormalConfirmPopup;
 }
 
 /**
