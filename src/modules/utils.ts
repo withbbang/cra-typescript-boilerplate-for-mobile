@@ -264,3 +264,36 @@ export async function handleSetParamsWithSync(
 
   return newParams;
 }
+
+/**
+ * 입력 시간을 원하는 포맷으로 변환해주는 함수
+ * @param {Date} date 변환하고 싶은 날짜
+ * @param {string} format 반환할 포맷
+ * @returns {string} 변환된 포맷 날짜 혹은 시간값
+ */
+export function handleConvertDateFormat(date: Date, format: string): string {
+  switch (format) {
+    case 'yyyy-mm-dd':
+      return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
+        2,
+        '0',
+      )}-${`${date.getDate() + 1}`.padStart(2, '0')}`;
+    case 'yyyymmdd':
+      return `${date.getFullYear()}${`${date.getMonth() + 1}`.padStart(
+        2,
+        '0',
+      )}${`${date.getDate() + 1}`.padStart(2, '0')}`;
+    case 'yyyyMMddhhmmss':
+      const handleSetPadZero = (value: number) =>
+        value < 10 ? `0${value}` : value;
+      return `${date.getFullYear()}${handleSetPadZero(
+        date.getMonth() + 1,
+      )}${handleSetPadZero(date.getDate())}${handleSetPadZero(
+        date.getHours(),
+      )}${handleSetPadZero(date.getMinutes())}${handleSetPadZero(
+        date.getSeconds(),
+      )}`;
+    default:
+      return '';
+  }
+}
