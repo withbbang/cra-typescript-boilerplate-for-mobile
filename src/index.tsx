@@ -8,6 +8,7 @@ import { persistStore } from 'redux-persist';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
+import InfoPopup from 'components/infoPopup';
 
 const rootNode: HTMLElement | null = document.getElementById('root');
 
@@ -17,6 +18,7 @@ ReactDOM.createRoot(rootNode!).render(
       <Loader />
       <ConfirmPopup />
       <ErrorPopup />
+      <InfoPopup />
       <App />
     </PersistGate>
   </Provider>,
