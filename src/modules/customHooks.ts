@@ -153,20 +153,24 @@ export function useGetDataHook({
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>(null);
+  let isSuccess = false;
+  let response: any;
 
   useEffect(() => {
     (async () => {
       if (!url) return;
 
       try {
-        beforeCb?.();
+        await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        const response = await getAPI(url, failCb);
+        response = await getAPI(url, failCb);
         setData(response);
-        successCb?.(response);
+        isSuccess = true;
       } catch (error: any) {
+        isSuccess = false;
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
+        if (isSuccess) await successCb?.(response);
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
@@ -174,17 +178,20 @@ export function useGetDataHook({
 
   const useGetData = useCallback(async () => {
     if (!url) return;
+    let isSuccess = false;
+    let response: any;
 
     try {
       beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
-      const response = await getAPI(url, failCb);
+      response = await getAPI(url, failCb);
       setData(response);
-      successCb?.(response);
-      successCb?.();
+      isSuccess = true;
     } catch (error: any) {
+      isSuccess = false;
       useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
+      if (isSuccess) await successCb?.(response);
       dispatch(useSetIsLoading({ isLoading: false }));
     }
   }, [data]);
@@ -211,24 +218,28 @@ export function usePostDataHook({
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>(null);
+  let isSuccess = false;
+  let response: any;
 
   const usePostData = useCallback(
     async (params?: any) => {
       if (!url) return;
 
       try {
-        beforeCb?.();
+        await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
-        const response = await postAPI(
+        response = await postAPI(
           url,
           await handleSetParamsWithSync(params),
           failCb,
         );
         setData(response);
-        successCb?.(response);
+        isSuccess = true;
       } catch (error: any) {
+        isSuccess = false;
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
+        if (isSuccess) await successCb?.(response);
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     },
@@ -256,6 +267,8 @@ export function usePostDataByConfirmPopupHook({
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
   const [data, setData] = useState<any>();
+  let isSuccess = false;
+  let response: any;
 
   const useSetActivePostDataByConfirmPopup = useCallback(
     (params?: any) => {
@@ -268,15 +281,15 @@ export function usePostDataByConfirmPopupHook({
         useSetConfirmBtnCb({
           useConfirmBtnCb: async () => {
             try {
-              beforeCb?.();
+              await beforeCb?.();
               dispatch(useSetIsLoading({ isLoading: true }));
-              const response = await postAPI(
+              response = await postAPI(
                 url,
                 await handleSetParamsWithSync(params),
                 failCb,
               );
               setData(response);
-              successCb?.(response);
+              isSuccess = true;
               dispatch(
                 useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
               );
@@ -285,8 +298,10 @@ export function usePostDataByConfirmPopupHook({
               dispatch(useSetConfirmBtnCb({}));
               dispatch(useSetCancelBtnCb({}));
             } catch (error: any) {
+              isSuccess = false;
               useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
             } finally {
+              if (isSuccess) await successCb?.(response);
               dispatch(useSetIsLoading({ isLoading: false }));
             }
           },
