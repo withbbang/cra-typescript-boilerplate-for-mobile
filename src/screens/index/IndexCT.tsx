@@ -25,17 +25,18 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     url: '/welkjtl',
   });
 
-  const test = (): Promise<unknown> =>
+  const test = (p: string): Promise<string> =>
     new Promise((resolve) => {
       setTimeout(() => {
-        resolve('b');
+        resolve(p);
       }, 500);
     });
 
   const onClick = () => {
     useSetActivePostDataByConfirmPopup({
       a: 'a',
-      b: test(),
+      b: test('b'),
+      c: test('c'),
     });
   };
 
