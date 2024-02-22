@@ -164,13 +164,15 @@ export function useGetDataHook({
         await beforeCb?.();
         dispatch(useSetIsLoading({ isLoading: true }));
         response = await getAPI(url, failCb);
-        setData(response);
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
-        if (isSuccess) await successCb?.(response);
+        if (isSuccess) {
+          setData(response);
+          await successCb?.(response);
+        }
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     })();
@@ -185,13 +187,15 @@ export function useGetDataHook({
       beforeCb?.();
       dispatch(useSetIsLoading({ isLoading: true }));
       response = await getAPI(url, failCb);
-      setData(response);
       isSuccess = true;
     } catch (error: any) {
       isSuccess = false;
       useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
-      if (isSuccess) await successCb?.(response);
+      if (isSuccess) {
+        setData(response);
+        await successCb?.(response);
+      }
       dispatch(useSetIsLoading({ isLoading: false }));
     }
   }, [data]);
@@ -233,13 +237,15 @@ export function usePostDataHook({
           await handleSetParamsWithSync(params),
           failCb,
         );
-        setData(response);
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
         useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
-        if (isSuccess) await successCb?.(response);
+        if (isSuccess) {
+          setData(response);
+          await successCb?.(response);
+        }
         dispatch(useSetIsLoading({ isLoading: false }));
       }
     },
@@ -288,7 +294,6 @@ export function usePostDataByConfirmPopupHook({
                 await handleSetParamsWithSync(params),
                 failCb,
               );
-              setData(response);
               isSuccess = true;
               dispatch(
                 useSetIsConfirmPopupActive({ isConfirmPopupActive: false }),
@@ -301,7 +306,10 @@ export function usePostDataByConfirmPopupHook({
               isSuccess = false;
               useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
             } finally {
-              if (isSuccess) await successCb?.(response);
+              if (isSuccess) {
+                setData(response);
+                await successCb?.(response);
+              }
               dispatch(useSetIsLoading({ isLoading: false }));
             }
           },
