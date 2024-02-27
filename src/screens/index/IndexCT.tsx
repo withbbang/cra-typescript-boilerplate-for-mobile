@@ -18,7 +18,7 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     beforeCb: () => console.warn('called beforeCb'),
     successCb: () => console.warn('called successCb'),
     cancelBtnCb: () => console.warn('called cancelBtnCb'),
-    failCb: () => {
+    failCb: (code?: string, message?: string) => {
       throw new ToastError('toast err');
     },
     errorPopupBtnCb: (code?: string) => console.warn('called errorPopupBtnCb'),

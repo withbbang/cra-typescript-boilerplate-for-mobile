@@ -27,7 +27,7 @@ import {
  */
 export function handleThrowErrorInAPI({
   status,
-  message,
+  message = 'You should set default error message',
   failCb,
 }: TypeThrowErrorInAPI) {
   failCb?.();
@@ -63,10 +63,10 @@ export function handleThrowErrorInAPI({
  */
 export function handleThrowCustomErrorInAPI({
   code,
-  message,
+  message = 'You should set default error message',
   failCb,
 }: TypeThrowCustomErrorInAPI) {
-  failCb?.(code);
+  failCb?.(code, message);
   // TODO: 코드에 따라 switch case 분기 필요
   throw new CustomAPIError(message);
 }
