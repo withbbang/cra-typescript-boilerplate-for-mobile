@@ -110,6 +110,9 @@ export class NativeError extends Error {
   name: string = 'Native Error';
 }
 
+// 토스트 팝업 표시를 위한 클래스
+export class ToastError extends Error {}
+
 export class BeforeErrorPopupThenStopLogic extends Error {
   constructor(message: string) {
     super(message);

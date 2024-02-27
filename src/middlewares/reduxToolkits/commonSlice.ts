@@ -5,9 +5,11 @@ export interface CommonState {
   message?: string;
   errorMessage?: string;
   infoMessage?: string;
+  toastMessage?: string;
   isConfirmPopupActive?: boolean;
   isErrorPopupActive?: boolean;
   isInfoPopupActive?: boolean;
+  toastPopupStatus?: string;
   confirmBtnText?: string;
   cancelBtnText?: string;
   errorBtnText?: string;
@@ -23,9 +25,11 @@ export const initialState: CommonState = {
   message: '',
   errorMessage: '',
   infoMessage: '',
+  toastMessage: '',
   isConfirmPopupActive: false,
   isErrorPopupActive: false,
   isInfoPopupActive: false,
+  toastPopupStatus: '',
   confirmBtnText: '',
   cancelBtnText: '',
   errorBtnText: '',
@@ -52,6 +56,9 @@ const commonSlice = createSlice({
     useSetInfoMessage(state: CommonState, action) {
       state.infoMessage = action.payload.infoMessage;
     },
+    useSetToastMessage(state: CommonState, action) {
+      state.toastMessage = action.payload.toastMessage;
+    },
     useSetIsConfirmPopupActive(state: CommonState, action) {
       state.isConfirmPopupActive = action.payload.isConfirmPopupActive;
     },
@@ -60,6 +67,9 @@ const commonSlice = createSlice({
     },
     useSetIsInfoPopupActive(state: CommonState, action) {
       state.isInfoPopupActive = action.payload.isInfoPopupActive;
+    },
+    useSetToastPopupStatus(state: CommonState, action) {
+      state.toastPopupStatus = action.payload.toastPopupStatus;
     },
     useSetConfirmBtnText(state: CommonState, action) {
       state.confirmBtnText = action.payload.confirmBtnText;
@@ -97,9 +107,11 @@ export const {
   useSetMessage,
   useSetErrorMessage,
   useSetInfoMessage,
+  useSetToastMessage,
   useSetIsConfirmPopupActive,
   useSetIsErrorPopupActive,
   useSetIsInfoPopupActive,
+  useSetToastPopupStatus,
   useSetConfirmBtnText,
   useSetCancelBtnText,
   useSetErrorBtnText,

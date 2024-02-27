@@ -15,6 +15,8 @@ import {
   useSetIsInfoPopupActive,
   useSetInfoBtnCb,
   useSetInfoBtnText,
+  useSetToastMessage,
+  useSetToastPopupStatus,
 } from 'middlewares/reduxToolkits/commonSlice';
 import { getAPI, postAPI } from './apis';
 import {
@@ -34,6 +36,7 @@ import {
   BeforeErrorPopupThenNonStopLogic,
   BeforeErrorPopupThenStopLogic,
   NativeError,
+  ToastError,
 } from './customErrorClasses';
 
 /**
@@ -45,7 +48,6 @@ import {
 export function useChangeHook(keyValueForm: TypeKeyValueForm) {
   const [form, setForm] = useState<TypeKeyValueForm>(keyValueForm);
 
-  // input, textarea, select onChange 콜백 함수
   const useChange = useCallback(
     (
       e:
@@ -136,6 +138,47 @@ export function useSetInfoPopupHook() {
 }
 
 /**
+ * [Toast 팝업 훅]
+ *
+ * @returns
+ */
+export function useSetToastPopupHook() {
+  const dispatch = useDispatch();
+  const [ids, setIds] = useState({
+    fstId: -1,
+    scnId: -1,
+  });
+
+  const useSetToastPopup = useCallback(
+    (message: string) => {
+      // 기존 timeout id clear
+      clearTimeout(ids.fstId);
+      clearTimeout(ids.scnId);
+
+      // 토스트 메세지 설정 및 timeout id 설정
+      dispatch(useSetToastMessage({ toastMessage: message }));
+      dispatch(useSetToastPopupStatus({ toastPopupStatus: 'fadeIn' }));
+      const fstId: any = setTimeout(() => {
+        dispatch(useSetToastPopupStatus({ toastPopupStatus: 'fadeOut' }));
+      }, 2000);
+      const scnId: any = setTimeout(() => {
+        dispatch(useSetToastMessage({ toastMessage: '' }));
+        dispatch(useSetToastPopupStatus({ toastPopupStatus: '' }));
+      }, 2500);
+
+      setIds((prevState) => ({
+        ...prevState,
+        fstId,
+        scnId,
+      }));
+    },
+    [ids],
+  );
+
+  return useSetToastPopup;
+}
+
+/**
  * [get method 커스텀 훅]
  *
  * @param {TypeGetAPIHookParams} params
@@ -152,6 +195,7 @@ export function useGetDataHook({
 }: TypeGetAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
   let isSuccess = false;
   let response: any;
@@ -167,7 +211,8 @@ export function useGetDataHook({
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
-        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+        if (error instanceof ToastError) useSetToastPopup(error.message);
+        else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         if (isSuccess) {
           setData(response);
@@ -190,7 +235,8 @@ export function useGetDataHook({
       isSuccess = true;
     } catch (error: any) {
       isSuccess = false;
-      useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+      if (error instanceof ToastError) useSetToastPopup(error.message);
+      else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
     } finally {
       if (isSuccess) {
         setData(response);
@@ -221,6 +267,7 @@ export function usePostDataHook({
 }: TypePostAPIHookParams) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>(null);
   let isSuccess = false;
   let response: any;
@@ -240,7 +287,8 @@ export function usePostDataHook({
         isSuccess = true;
       } catch (error: any) {
         isSuccess = false;
-        useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+        if (error instanceof ToastError) useSetToastPopup(error.message);
+        else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
       } finally {
         if (isSuccess) {
           setData(response);
@@ -272,6 +320,7 @@ export function usePostDataByConfirmPopupHook({
 }: TypePostAPIByConfirmPopupHook) {
   const dispatch = useDispatch();
   const useSetCatchClauseForErrorPopup = useSetCatchClauseForErrorPopupHook();
+  const useSetToastPopup = useSetToastPopupHook();
   const [data, setData] = useState<any>();
   let isSuccess = false;
   let response: any;
@@ -304,7 +353,8 @@ export function usePostDataByConfirmPopupHook({
               dispatch(useSetCancelBtnCb({}));
             } catch (error: any) {
               isSuccess = false;
-              useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
+              if (error instanceof ToastError) useSetToastPopup(error.message);
+              else useSetCatchClauseForErrorPopup(error, errorPopupBtnCb);
             } finally {
               if (isSuccess) {
                 setData(response);

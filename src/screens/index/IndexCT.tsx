@@ -6,6 +6,7 @@ import {
   usePostDataHook,
 } from 'modules/customHooks';
 import { handleParseDataFromJSInterface } from 'modules/utils';
+import { ToastError } from 'modules/customErrorClasses';
 import IndexPT from './IndexPT';
 
 function IndexCT({}: IndexCTProps): React.JSX.Element {
@@ -17,7 +18,9 @@ function IndexCT({}: IndexCTProps): React.JSX.Element {
     beforeCb: () => console.warn('called beforeCb'),
     successCb: () => console.warn('called successCb'),
     cancelBtnCb: () => console.warn('called cancelBtnCb'),
-    failCb: () => console.warn('called failCb'),
+    failCb: () => {
+      throw new ToastError('toast err');
+    },
     errorPopupBtnCb: (code?: string) => console.warn('called errorPopupBtnCb'),
   });
 
