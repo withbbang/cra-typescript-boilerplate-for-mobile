@@ -35,7 +35,6 @@ import {
   AfterErrorPopupThenStopLogic,
   BeforeErrorPopupThenNonStopLogic,
   BeforeErrorPopupThenStopLogic,
-  NativeError,
   ToastError,
 } from './customErrorClasses';
 
