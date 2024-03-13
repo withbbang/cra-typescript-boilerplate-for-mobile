@@ -240,9 +240,11 @@ export function useGetDataHook({
     } finally {
       if (isSuccess) {
         setData(response);
+        dispatch(useSetIsLoading({ isLoading: false }));
         await successCb?.(response);
+      } else {
+        dispatch(useSetIsLoading({ isLoading: false }));
       }
-      dispatch(useSetIsLoading({ isLoading: false }));
     }
   }, [data]);
 
@@ -292,9 +294,11 @@ export function usePostDataHook({
       } finally {
         if (isSuccess) {
           setData(response);
+          dispatch(useSetIsLoading({ isLoading: false }));
           await successCb?.(response);
+        } else {
+          dispatch(useSetIsLoading({ isLoading: false }));
         }
-        dispatch(useSetIsLoading({ isLoading: false }));
       }
     },
     [url, beforeCb, successCb, failCb, errorPopupBtnCb, data],
@@ -358,9 +362,11 @@ export function usePostDataByConfirmPopupHook({
             } finally {
               if (isSuccess) {
                 setData(response);
+                dispatch(useSetIsLoading({ isLoading: false }));
                 await successCb?.(response);
+              } else {
+                dispatch(useSetIsLoading({ isLoading: false }));
               }
-              dispatch(useSetIsLoading({ isLoading: false }));
             }
           },
         }),
